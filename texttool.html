@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <form name="form" class="form">
+        <table class="copyabletable">
+            <tr>
+                <td>
+                    <label for="modeselect">Mode:</label>
+                </td>
+                <td>
+                    <select name="modeselect" class="modeselect">
+                        <option value="copy">Copy (Debug)</option>
+                        <option value="prefixsuffix">Add Prefix/Suffix</option>
+                        <option value="camelseparate">Camel Case Separate</option>
+                        <option value="colext">Column Extract</option>
+                        <option value="deldupe">Delete Duplicate Lines</option>
+                        <option value="delempty">Delete Empty Lines</option>
+                        <option value="deltoken">Delete Lines with Token</option>
+                        <option value="delwithouttoken">Delete Lines without Token</option>
+                        <option value="insertnewline">Insert Newline</option>
+                        <option value="replacetable">Replace Table</option>
+                        <option value="sort">Sort</option>
+                    </select>
+                </td>
+            </tr>
+            <tr class="inputtd">
+                <td>
+                    <label for="input">Input:</label>
+                </td>
+                <td>
+                    <textarea class="input inputeventlisten" rows="10" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="replacetabletd intermediary" style="display: none">
+                <td>
+                    <label for="replacetable">Table:</label>
+                </td>
+                <td>
+                    <textarea class="replacetable inputeventlisten" rows="10" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="colnotd intermediary" style="display: none">
+                <td>
+                    <label for="colno">Column Number:</label>
+                </td>
+                <td>
+                    <textarea class="colno inputeventlisten" rows="1" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="delimtd intermediary" style="display: none">
+                <td>
+                    <label for="delim">Delimiter:</label>
+                </td>
+                <td>
+                    <textarea class="delim inputeventlisten" rows="1" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="tokentd intermediary" style="display: none">
+                <td>
+                    <label for="token">Token:</label>
+                </td>
+                <td>
+                    <textarea class="token inputeventlisten" rows="1" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="prefixtd intermediary" style="display: none">
+                <td>
+                    <label for="prefix">Prefix:</label>
+                </td>
+                <td>
+                    <textarea class="prefix inputeventlisten" rows="1" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="suffixtd intermediary" style="display: none">
+                <td>
+                    <label for="suffix">Suffix:</label>
+                </td>
+                <td>
+                    <textarea class="suffix inputeventlisten" rows="1" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="output">Output:</label>
+                </td>
+                <td>
+                    <textarea class="output" rows="10" cols="50"></textarea>
+                </td>
+            </tr>
+        </table>
+        <button type="button" onclick="AddToChain(this)">Add</button>
+    </form>
+    <script>
+        AddListeners();
+        function AddListeners() {
+            var inputlistenelems = document.getElementsByClassName("inputeventlisten");
+            for (const el of inputlistenelems) {
+                el.addEventListener("input", UpdateAllTextBoxes);
+            }
+            var modeselectelems = document.getElementsByClassName("modeselect");
+            for (const el of modeselectelems) {
+                el.onchange = UpdateMode;
+            }
+        }
+        function UpdateAllTextBoxes() {
+            UpdateTextBoxes(0);
+        }
+        function AddToChain(e) {
+            var tableelems = document.getElementsByClassName("copyabletable");
+            var lasttable = tableelems[tableelems.length - 1];
+            var clone1 = lasttable.cloneNode(true);
+            document.getElementsByClassName("form")[0].appendChild(clone1);
+            var clone2 = e.cloneNode(true);
+            document.getElementsByClassName("form")[0].appendChild(clone2);
+            //delete the input box we just cloned - modifiers after the first use the previous mod's output as their input
+            var inputelems = document.getElementsByClassName("inputtd");
+            if (inputelems.length > 1) {
+                var elemnum = inputelems.length - 1;
+                var lastinput = inputelems[elemnum];
+                lastinput.remove();
+            }
+            AddListeners();
+        }
+        function UpdateMode() {
+            //some modes have their own intermediary boxes to set how they work
+            //hide everything by default, re-show based on mode
+            var intermedelems = document.getElementsByClassName("intermediary");
+            for (const el of intermedelems) {
+                el.style.display = "none";
+            }
+            var modeselectelems = document.getElementsByClassName("modeselect");
+            for (var iter = 0; iter < modeselectelems.length; iter++) {
+                switch (modeselectelems[iter].value) {
+                    case "prefixsuffix":
+                        document.getElementsByClassName("prefixtd")[iter].style.display = "table-row";
+                        document.getElementsByClassName("suffixtd")[iter].style.display = "table-row";
+                        break;
+                    case "colext":
+                        document.getElementsByClassName("colnotd")[iter].style.display = "table-row";
+                        document.getElementsByClassName("delimtd")[iter].style.display = "table-row";
+                        break;
+                    case "replacetable":
+                        document.getElementsByClassName("replacetabletd")[iter].style.display = "table-row";
+                        break;
+                    case "insertnewline":
+                        document.getElementsByClassName("delimtd")[iter].style.display = "table-row";
+                        break;
+                    case "deltoken":
+                    case "delwithouttoken":
+                        document.getElementsByClassName("tokentd")[iter].style.display = "table-row";
+                        break;
+                    default:
+                        break;
+                }
+                UpdateTextBoxes(iter);
+            }
+        }
+        function UpdateTextBoxes(mod_num) {
+            var modeselectelems = document.getElementsByClassName("modeselect");
+            for (var iter = mod_num; iter < modeselectelems.length; iter++) {
+                var output = document.getElementsByClassName('output')[iter];
+                var input;
+                //modifiers after the first use the previous mod's output as their input
+                if (iter == 0) {
+                    input = document.getElementsByClassName('input')[iter];
+                }
+                else {
+                    input = document.getElementsByClassName('output')[iter - 1];
+                }
+                var mode = modeselectelems[iter];
+                //console.log("UpdateTextBoxes mode " + mode.value + " on mod " + iter);
+                switch (mode.value) {
+                    case "insertnewline":
+                        output.value = input.value.replaceAll(document.getElementsByClassName("delim")[iter].value, "\n");
+                        break;
+                    case "replacetable":
+                        var pieces = input.value.split("\n");
+                        var table = document.getElementsByClassName('replacetable')[iter].value.split("\n");
+                        for (var i = 0; i + 1 < table.length; i += 2) {
+                            for (var j = 0; j < pieces.length; j++) {
+                                //console.log(pieces[j] + " Replace " + table[i] + " with " + table[i + 1]);
+                                pieces[j] = pieces[j].replaceAll(table[i], table[i + 1]);
+                            }
+                        }
+                        output.value = pieces.join("\n");
+                        break;
+                    case "sort":
+                        var pieces = input.value.split("\n");
+                        pieces.sort();
+                        output.value = pieces.join("\n");
+                        break;
+                    case "prefixsuffix":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            o.push(document.getElementsByClassName("prefix")[iter].value + pieces[i] + document.getElementsByClassName("suffix")[iter].value);
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    case "colext":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            var segments = pieces[i].split(document.getElementsByClassName("delim")[iter].value);
+                            o.push(segments[Math.min(segments.length - 1, document.getElementsByClassName("colno")[iter].value)]);
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    case "deldupe":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            if (pieces[i] == '<BR>' || o.indexOf(pieces[i]) < 0) {
+                                o.push(pieces[i]);
+                            }
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    case "delempty":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            if (pieces[i].length > 0) {
+                                o.push(pieces[i]);
+                            }
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    case "deltoken":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            if (pieces[i].includes(document.getElementsByClassName("token")[iter].value) == false) {
+                                o.push(pieces[i]);
+                            }
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    case "delwithouttoken":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            if (pieces[i].includes(document.getElementsByClassName("token")[iter].value) == true) {
+                                o.push(pieces[i]);
+                            }
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    case "camelseparate":
+                        var pieces = input.value.split("\n");
+                        var o = [];
+                        for (var i = 0; i < pieces.length; i++) {
+                            var text = pieces[i].replace(/([A-Z])/g, " $1");
+                            o.push(text.trim());
+                        }
+                        output.value = o.join("\n");
+                        break;
+                    default:
+                        console.log("Unknown mode");
+                    case "copy":
+                        output.value = input.value;
+                        break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
