@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html>
+<!--Original source: https://github.com/Pinsplash/texttool-->
+<!--Last time I remembered to update the build date: October 5, 2025-->
 <head>
 </head>
 <body>
@@ -7,27 +9,40 @@
         <table class="copyabletable">
             <tr>
                 <td>
-                    <label for="modeselect">Mode:</label>
+                    <label for="targetmodeselect" title="Select what text to target with the effect">Target:</label>
                 </td>
                 <td>
-                    <select name="modeselect" class="modeselect">
+                    <select name="targetmodeselect" class="targetmodeselect">
+                        <option value="alltext">All Text</option>
+                        <option value="duplicatelines">Duplicate Lines</option>
+                        <option value="emptylines">Empty Lines</option>
+                        <option value="withtoken">Lines with Token</option>
+                        <option value="without_token">Lines without Token</option>
+                        <option value="uniquelines">Unique Lines</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="effectselect" title="Select effect to apply to targeted text">Effect:</label>
+                </td>
+                <td>
+                    <select name="effectselect" class="effectselect">
                         <option value="copy">Copy (Debug)</option>
                         <option value="prefixsuffix">Add Prefix/Suffix</option>
                         <option value="camelseparate">Camel Case Separate</option>
+                        <option value="clear">Clear</option>
                         <option value="colext">Column Extract</option>
-                        <option value="deldupe">Delete Duplicate Lines</option>
-                        <option value="delempty">Delete Empty Lines</option>
-                        <option value="deltoken">Delete Lines with Token</option>
-                        <option value="delwithouttoken">Delete Lines without Token</option>
+                        <option value="delete">Delete</option>
                         <option value="insertnewline">Insert Newline</option>
                         <option value="replacetable">Replace Table</option>
-                        <option value="sort">Sort</option>
+                        <option value="sort">Sort (all text only)</option>
                     </select>
                 </td>
             </tr>
             <tr class="inputtd">
                 <td>
-                    <label for="input">Input:</label>
+                    <label for="input" title="Put original text here">Input:</label>
                 </td>
                 <td>
                     <textarea class="input inputeventlisten" rows="10" cols="50"></textarea>
@@ -35,7 +50,7 @@
             </tr>
             <tr class="replacetabletd intermediary" style="display: none">
                 <td>
-                    <label for="replacetable">Table:</label>
+                    <label for="replacetable" title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label>
                 </td>
                 <td>
                     <textarea class="replacetable inputeventlisten" rows="10" cols="50"></textarea>
@@ -43,7 +58,7 @@
             </tr>
             <tr class="colnotd intermediary" style="display: none">
                 <td>
-                    <label for="colno">Column Number:</label>
+                    <label for="colno" title="When interpreting text as a table, which column to extract">Column Number:</label>
                 </td>
                 <td>
                     <textarea class="colno inputeventlisten" rows="1" cols="50"></textarea>
@@ -51,7 +66,7 @@
             </tr>
             <tr class="delimtd intermediary" style="display: none">
                 <td>
-                    <label for="delim">Delimiter:</label>
+                    <label for="delim" title="A character or string that indicates where to separate text">Delimiter:</label>
                 </td>
                 <td>
                     <textarea class="delim inputeventlisten" rows="1" cols="50"></textarea>
@@ -67,7 +82,7 @@
             </tr>
             <tr class="prefixtd intermediary" style="display: none">
                 <td>
-                    <label for="prefix">Prefix:</label>
+                    <label for="prefix" title="Prefix to add to text">Prefix:</label>
                 </td>
                 <td>
                     <textarea class="prefix inputeventlisten" rows="1" cols="50"></textarea>
@@ -75,7 +90,7 @@
             </tr>
             <tr class="suffixtd intermediary" style="display: none">
                 <td>
-                    <label for="suffix">Suffix:</label>
+                    <label for="suffix" title="Suffix to add to text">Suffix:</label>
                 </td>
                 <td>
                     <textarea class="suffix inputeventlisten" rows="1" cols="50"></textarea>
@@ -83,7 +98,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="output">Output:</label>
+                    <label for="output" title="Edited text appears here!">Output:</label>
                 </td>
                 <td>
                     <textarea class="output" rows="10" cols="50"></textarea>
@@ -99,9 +114,13 @@
             for (const el of inputlistenelems) {
                 el.addEventListener("input", UpdateAllTextBoxes);
             }
-            var modeselectelems = document.getElementsByClassName("modeselect");
-            for (const el of modeselectelems) {
-                el.onchange = UpdateMode;
+            var effectselectelems = document.getElementsByClassName("effectselect");
+            for (const el of effectselectelems) {
+                el.onchange = UpdateParameters;
+            }
+            var targetmodeselectelems = document.getElementsByClassName("targetmodeselect");
+            for (const el of targetmodeselectelems) {
+                el.onchange = UpdateParameters;
             }
         }
         function UpdateAllTextBoxes() {
@@ -123,16 +142,16 @@
             }
             AddListeners();
         }
-        function UpdateMode() {
+        function UpdateParameters() {
             //some modes have their own intermediary boxes to set how they work
             //hide everything by default, re-show based on mode
             var intermedelems = document.getElementsByClassName("intermediary");
             for (const el of intermedelems) {
                 el.style.display = "none";
             }
-            var modeselectelems = document.getElementsByClassName("modeselect");
-            for (var iter = 0; iter < modeselectelems.length; iter++) {
-                switch (modeselectelems[iter].value) {
+            var effectselectelems = document.getElementsByClassName("effectselect");
+            for (var iter = 0; iter < effectselectelems.length; iter++) {
+                switch (effectselectelems[iter].value) {
                     case "prefixsuffix":
                         document.getElementsByClassName("prefixtd")[iter].style.display = "table-row";
                         document.getElementsByClassName("suffixtd")[iter].style.display = "table-row";
@@ -147,8 +166,16 @@
                     case "insertnewline":
                         document.getElementsByClassName("delimtd")[iter].style.display = "table-row";
                         break;
-                    case "deltoken":
-                    case "delwithouttoken":
+                    default:
+                        break;
+                }
+                UpdateTextBoxes(iter);
+            }
+            var targetmodeelems = document.getElementsByClassName("targetmodeselect");
+            for (var iter = 0; iter < targetmodeelems.length; iter++) {
+                switch (targetmodeelems[iter].value) {
+                    case "withtoken":
+                    case "without_token":
                         document.getElementsByClassName("tokentd")[iter].style.display = "table-row";
                         break;
                     default:
@@ -158,112 +185,114 @@
             }
         }
         function UpdateTextBoxes(mod_num) {
-            var modeselectelems = document.getElementsByClassName("modeselect");
-            for (var iter = mod_num; iter < modeselectelems.length; iter++) {
-                var output = document.getElementsByClassName('output')[iter];
+            var effectselectelems = document.getElementsByClassName("effectselect");
+            var targetmodeselectelems = document.getElementsByClassName("targetmodeselect");
+            for (var iter = mod_num; iter < effectselectelems.length; iter++) {
+                var output = document.getElementsByClassName("output")[iter];
                 var input;
                 //modifiers after the first use the previous mod's output as their input
                 if (iter == 0) {
-                    input = document.getElementsByClassName('input')[iter];
+                    input = document.getElementsByClassName("input")[iter];
                 }
                 else {
-                    input = document.getElementsByClassName('output')[iter - 1];
+                    input = document.getElementsByClassName("output")[iter - 1];
                 }
-                var mode = modeselectelems[iter];
-                //console.log("UpdateTextBoxes mode " + mode.value + " on mod " + iter);
-                switch (mode.value) {
-                    case "insertnewline":
-                        output.value = input.value.replaceAll(document.getElementsByClassName("delim")[iter].value, "\n");
-                        break;
-                    case "replacetable":
-                        var pieces = input.value.split("\n");
-                        var table = document.getElementsByClassName('replacetable')[iter].value.split("\n");
-                        for (var i = 0; i + 1 < table.length; i += 2) {
-                            for (var j = 0; j < pieces.length; j++) {
-                                //console.log(pieces[j] + " Replace " + table[i] + " with " + table[i + 1]);
-                                pieces[j] = pieces[j].replaceAll(table[i], table[i + 1]);
-                            }
-                        }
-                        output.value = pieces.join("\n");
-                        break;
-                    case "sort":
-                        var pieces = input.value.split("\n");
-                        pieces.sort();
-                        output.value = pieces.join("\n");
-                        break;
-                    case "prefixsuffix":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            o.push(document.getElementsByClassName("prefix")[iter].value + pieces[i] + document.getElementsByClassName("suffix")[iter].value);
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    case "colext":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            var segments = pieces[i].split(document.getElementsByClassName("delim")[iter].value);
-                            o.push(segments[Math.min(segments.length - 1, document.getElementsByClassName("colno")[iter].value)]);
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    case "deldupe":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            if (pieces[i] == '<BR>' || o.indexOf(pieces[i]) < 0) {
-                                o.push(pieces[i]);
-                            }
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    case "delempty":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            if (pieces[i].length > 0) {
-                                o.push(pieces[i]);
-                            }
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    case "deltoken":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            if (pieces[i].includes(document.getElementsByClassName("token")[iter].value) == false) {
-                                o.push(pieces[i]);
-                            }
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    case "delwithouttoken":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            if (pieces[i].includes(document.getElementsByClassName("token")[iter].value) == true) {
-                                o.push(pieces[i]);
-                            }
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    case "camelseparate":
-                        var pieces = input.value.split("\n");
-                        var o = [];
-                        for (var i = 0; i < pieces.length; i++) {
-                            var text = pieces[i].replace(/([A-Z])/g, " $1");
-                            o.push(text.trim());
-                        }
-                        output.value = o.join("\n");
-                        break;
-                    default:
-                        console.log("Unknown mode");
-                    case "copy":
-                        output.value = input.value;
-                        break;
+
+                var pieces = input.value.split("\n");
+                var targetmode = targetmodeselectelems[iter];
+                var linestoedit = GetTargetLineNums(pieces, targetmode, iter);
+                var effect = effectselectelems[iter];
+                output.value = EditLines(pieces, effect, iter, linestoedit).join("\n");
+            }
+        }
+        //lines not targeted by the target mode are left undisturbed
+        //create a list of line numbers we want to edit
+        function GetTargetLineNums(input, targetmode, iter) {
+            var targetfunction;
+            var numbers = [];
+            switch (targetmode.value) {
+                case "duplicatelines":
+                    targetfunction = (line, iter, input) => { return input.indexOf(line, input.indexOf(line) + 1) >= 0 && line != "<BR>" };
+                    break;
+                case "uniquelines":
+                    targetfunction = (line, iter, input) => { return input.indexOf(line, input.indexOf(line) + 1) == -1 && line != "<BR>" };
+                    break;
+                case "emptylines":
+                    targetfunction = (line, iter, input) => { return line.length == 0 };
+                    break;
+                case "withtoken":
+                    targetfunction = (line, iter, input) => { return line.includes(document.getElementsByClassName("token")[iter].value) == true };
+                    break;
+                case "without_token":
+                    targetfunction = (line, iter, input) => { return line.includes(document.getElementsByClassName("token")[iter].value) == false };
+                    break;
+                default:
+                    console.log("Unknown target mode");
+                case "alltext":
+                    targetfunction = (line, iter, input) => { return true };
+                    break;
+            }
+            for (var j = 0; j < input.length; j++) {
+                if (targetfunction(input[j], iter, input)) {
+                    numbers.push(j);
                 }
             }
+            return numbers;
+        }
+        function EditLines(input, effect, iter, linestoedit) {
+            var output = input;
+            var effectfunction;
+            switch (effect.value) {
+                case "insertnewline":
+                    effectfunction = (line, iter) => { return line.replaceAll(document.getElementsByClassName("delim")[iter].value, "\n") };
+                    break;
+                case "replacetable":
+                    effectfunction = (line, iter) => {
+                        var table = document.getElementsByClassName("replacetable")[iter].value.split("\n");
+                        for (var i = 0; i + 1 < table.length; i += 2) {
+                            line = line.replaceAll(table[i], table[i + 1]);
+                        }
+                        return line;
+                    }
+                    break;
+                //can't really think of how i would go about sorting a subset of the input, but can't think of a very good use case either
+                case "sort":
+                    return input.sort();
+                    break;
+                case "prefixsuffix":
+                    effectfunction = (line, iter) => { return document.getElementsByClassName("prefix")[iter].value + line + document.getElementsByClassName("suffix")[iter].value };
+                    break;
+                case "colext":
+                    effectfunction = (line, iter) => {
+                        var segments = line.split(document.getElementsByClassName("delim")[iter].value);
+                        return segments[Math.min(segments.length - 1, document.getElementsByClassName("colno")[iter].value)];
+                    }
+                    break;
+                case "camelseparate":
+                    effectfunction = (line, iter) => { return line.replace(/([A-Z])/g, " $1").trim() };
+                    break;
+                case "delete":
+                    effectfunction = (line, iter) => { return "texttoolinternalsignal_delete" };
+                    break;
+                case "clear":
+                    effectfunction = (line, iter) => { return "" };
+                    break;
+                default:
+                    console.log("Unknown effect");
+                case "copy":
+                    effectfunction = (line, iter) => { return line };
+                    break;
+            }
+            var deletedlines = 0;
+            for (var j = 0; j < linestoedit.length; j++) {
+                var linenum = linestoedit[j] - deletedlines;
+                output[linenum] = effectfunction(input[linenum], iter);
+                if (output[linenum] == "texttoolinternalsignal_delete") {
+                    output.splice(linenum, 1);
+                    deletedlines++;
+                }
+            }
+            return output;
         }
     </script>
 </body>
