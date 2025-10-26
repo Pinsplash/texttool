@@ -37,7 +37,8 @@
                         <option value="delete">Delete</option>
                         <option value="insertnewline">Insert Newline</option>
                         <option value="replacetable">Replace Table</option>
-                        <option value="sort">Sort (all text only)</option>
+                        <option value="sort">Sort Alphabetically</option>
+                        <option value="sortnumstrings">Sort by # Instances of Substring</option>
                     </select>
                 </td>
             </tr>
@@ -143,30 +144,52 @@
             }
             AddListeners();
         }
-        function UpdateParameters() {
-            //some modes have their own intermediary boxes to set how they work
-            //hide everything by default, re-show based on mode
-            var intermedelems = document.getElementsByClassName("intermediary");
-            for (const el of intermedelems) {
-                el.style.display = "none";
+        function GetElementInTable(iter, elementname) {
+            var table = document.getElementsByClassName("copyabletable")[iter];
+            var elem = table.getElementsByClassName(elementname)[0];
+            /*
+            if (table) {
+                console.log("copyabletable #" + iter + " exists");
+            } else {
+                console.log("copyabletable #" + iter + " did not exist");
             }
-            var effectselectelems = document.getElementsByClassName("effectselect");
-            for (var iter = 0; iter < effectselectelems.length; iter++) {
-                switch (effectselectelems[iter].value) {
+            if (elem) {
+                console.log("element " + elementname + " exists");
+            } else {
+                console.log("element " + elementname + " did not exist");
+            }
+            */
+            return elem;
+        }
+        function UpdateParameters() {
+            var tableelems = document.getElementsByClassName("copyabletable");
+            for (var iter = 0; iter < tableelems.length; iter++) {
+                //some modes have their own intermediary boxes to set how they work
+                //hide everything by default, re-show based on mode
+                var intermedelems = tableelems[iter].getElementsByClassName("intermediary");
+                for (const el of intermedelems) {
+                    el.style.display = "none";
+                }
+
+                var effect = GetElementInTable(iter, "effectselect");
+                switch (effect.value) {
                     case "prefixsuffix":
-                        document.getElementsByClassName("prefixtd")[iter].style.display = "table-row";
-                        document.getElementsByClassName("suffixtd")[iter].style.display = "table-row";
+                        GetElementInTable(iter, "prefixtd").style.display = "table-row";
+                        GetElementInTable(iter, "suffixtd").style.display = "table-row";
                         break;
                     case "colext":
-                        document.getElementsByClassName("colnotd")[iter].style.display = "table-row";
-                        document.getElementsByClassName("delimtd")[iter].style.display = "table-row";
+                        GetElementInTable(iter, "colnotd").style.display = "table-row";
+                        GetElementInTable(iter, "delimtd").style.display = "table-row";
                         break;
                     case "replacetable":
-                        document.getElementsByClassName("replacetabletd")[iter].style.display = "table-row";
+                        GetElementInTable(iter, "replacetabletd").style.display = "table-row";
                         break;
                     case "insertnewline":
                     case "allcombos":
-                        document.getElementsByClassName("delimtd")[iter].style.display = "table-row";
+                        GetElementInTable(iter, "delimtd").style.display = "table-row";
+                        break;
+                    case "sortnumstrings":
+                        GetElementInTable(iter, "tokentd").style.display = "table-row";
                         break;
                     default:
                         break;
@@ -175,10 +198,11 @@
             }
             var targetmodeelems = document.getElementsByClassName("targetmodeselect");
             for (var iter = 0; iter < targetmodeelems.length; iter++) {
-                switch (targetmodeelems[iter].value) {
+                var targetmode = GetElementInTable(iter, "targetmodeselect");
+                switch (targetmode.value) {
                     case "withtoken":
                     case "without_token":
-                        document.getElementsByClassName("tokentd")[iter].style.display = "table-row";
+                        GetElementInTable(iter, "tokentd").style.display = "table-row";
                         break;
                     default:
                         break;
@@ -187,24 +211,23 @@
             }
         }
         function UpdateTextBoxes(mod_num) {
-            var effectselectelems = document.getElementsByClassName("effectselect");
+            var tableelems = document.getElementsByClassName("copyabletable");
             var targetmodeselectelems = document.getElementsByClassName("targetmodeselect");
-            for (var iter = mod_num; iter < effectselectelems.length; iter++) {
-                var output = document.getElementsByClassName("output")[iter];
+            for (var iter = mod_num; iter < tableelems.length; iter++) {
+                var output = GetElementInTable(iter, "output");
                 var input;
                 //modifiers after the first use the previous mod's output as their input
                 if (iter == 0) {
-                    input = document.getElementsByClassName("input")[iter];
+                    input = GetElementInTable(iter, "input");
                 }
                 else {
-                    input = document.getElementsByClassName("output")[iter - 1];
+                    input = GetElementInTable(iter - 1, "output");
                 }
 
                 var pieces = input.value.split("\n");
                 var targetmode = targetmodeselectelems[iter];
                 var linestoedit = GetTargetLineNums(pieces, targetmode, iter);
-                var effect = effectselectelems[iter];
-                output.value = EditLines(pieces, effect, iter, linestoedit).join("\n");
+                output.value = EditLines(pieces, iter, linestoedit).join("\n");
             }
         }
         //lines not targeted by the target mode are left undisturbed
@@ -223,10 +246,10 @@
                     targetfunction = (line, iter, input) => { return line.length == 0 };
                     break;
                 case "withtoken":
-                    targetfunction = (line, iter, input) => { return line.includes(document.getElementsByClassName("token")[iter].value) == true };
+                    targetfunction = (line, iter, input) => { return line.includes(GetElementInTable(iter, "token").value) == true };
                     break;
                 case "without_token":
-                    targetfunction = (line, iter, input) => { return line.includes(document.getElementsByClassName("token")[iter].value) == false };
+                    targetfunction = (line, iter, input) => { return line.includes(GetElementInTable(iter, "token").value) == false };
                     break;
                 default:
                     console.log("Unknown target mode");
@@ -241,16 +264,32 @@
             }
             return numbers;
         }
-        function EditLines(input, effect, iter, linestoedit) {
+        var g_iter;
+        function compareNumSubstrings(a, b) {
+            debugger;
+            var token = GetElementInTable(g_iter, "token").value;
+            console.log("token from table " + g_iter + ": " + token);
+            let re = new RegExp(String.raw`\s${token}\s`, "g");
+            var a_count = (a.match(re) || []).length;
+            var b_count = (b.match(re) || []).length;
+            if (a_count < b_count) {
+                return -1;
+            } else if (a_count > b_count) {
+                return 1;
+            }
+            return 0;
+        }
+        function EditLines(input, iter, linestoedit) {
             var output = input;
             var effectfunction;
+            var effect = GetElementInTable(iter, "effectselect");
             switch (effect.value) {
                 case "insertnewline":
-                    effectfunction = (line, iter) => { return line.replaceAll(document.getElementsByClassName("delim")[iter].value, "\n") };
+                    effectfunction = (line, iter) => { return line.replaceAll(GetElementInTable(iter, "delim").value, "\n") };
                     break;
                 case "replacetable":
                     effectfunction = (line, iter) => {
-                        var table = document.getElementsByClassName("replacetable")[iter].value.split("\n");
+                        var table = GetElementInTable(iter, "replacetable").value.split("\n");
                         for (var i = 0; i + 1 < table.length; i += 2) {
                             line = line.replaceAll(table[i], table[i + 1]);
                         }
@@ -261,13 +300,17 @@
                 case "sort":
                     return input.sort();
                     break;
+                case "sortnumstrings":
+                    g_iter = iter;
+                    return input.sort(compareNumSubstrings);
+                    break;
                 case "prefixsuffix":
-                    effectfunction = (line, iter) => { return document.getElementsByClassName("prefix")[iter].value + line + document.getElementsByClassName("suffix")[iter].value };
+                    effectfunction = (line, iter) => { return GetElementInTable(iter, "prefix").value + line + GetElementInTable(iter, "suffix").value };
                     break;
                 case "colext":
                     effectfunction = (line, iter) => {
-                        var segments = line.split(document.getElementsByClassName("delim")[iter].value);
-                        return segments[Math.min(segments.length - 1, document.getElementsByClassName("colno")[iter].value)];
+                        var segments = line.split(GetElementInTable(iter, "delim").value);
+                        return segments[Math.min(segments.length - 1, GetElementInTable(iter, "colno").value)];
                     }
                     break;
                 case "camelseparate":
@@ -286,7 +329,7 @@
                         buffer = [input[i]];
                         var index = 0;
                         while (result[index]) {
-                            buffer.push("" + result[index] + document.getElementsByClassName("delim")[iter].value + input[i]);
+                            buffer.push("" + result[index] + GetElementInTable(iter, "delim").value + input[i]);
                             index++;
                         }
                         result = result.concat(buffer);
