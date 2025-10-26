@@ -30,6 +30,7 @@
                     <select name="effectselect" class="effectselect">
                         <option value="copy">Copy (Debug)</option>
                         <option value="prefixsuffix">Add Prefix/Suffix</option>
+                        <option value="allcombos">All Combinations</option>
                         <option value="camelseparate">Camel Case Separate</option>
                         <option value="clear">Clear</option>
                         <option value="colext">Column Extract</option>
@@ -164,6 +165,7 @@
                         document.getElementsByClassName("replacetabletd")[iter].style.display = "table-row";
                         break;
                     case "insertnewline":
+                    case "allcombos":
                         document.getElementsByClassName("delimtd")[iter].style.display = "table-row";
                         break;
                     default:
@@ -276,6 +278,20 @@
                     break;
                 case "clear":
                     effectfunction = (line, iter) => { return "" };
+                    break;
+                case "allcombos":
+                    var buffer = [];
+                    var result = [];
+                    for (i = 0; i < input.length; i++) {
+                        buffer = [input[i]];
+                        var index = 0;
+                        while (result[index]) {
+                            buffer.push("" + result[index] + document.getElementsByClassName("delim")[iter].value + input[i]);
+                            index++;
+                        }
+                        result = result.concat(buffer);
+                    }
+                    return result;
                     break;
                 default:
                     console.log("Unknown effect");
