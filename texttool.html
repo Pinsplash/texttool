@@ -42,6 +42,7 @@
                         <option value="replacetable">Replace Table</option>
                         <option value="sort">Sort Alphabetically</option>
                         <option value="sortnumstrings">Sort by # Instances of Substring</option>
+                        <option value="tabtable">Tab Table</option>
                     </select>
                 </td>
             </tr>
@@ -59,6 +60,14 @@
                 </td>
                 <td>
                     <textarea class="replacetable inputeventlisten" rows="10" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="desiredtabwidthtd intermediary" style="display: none">
+                <td>
+                    <label for="desiredtabwidth" title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label>
+                </td>
+                <td>
+                    <textarea class="desiredtabwidth inputeventlisten" rows="1" cols="50">4</textarea>
                 </td>
             </tr>
             <tr class="colnotd intermediary" style="display: none">
@@ -194,6 +203,10 @@
                     case "sortnumstrings":
                         GetElementInTable(iter, "tokentd").style.display = "table-row";
                         break;
+                    case "tabtable":
+                        GetElementInTable(iter, "desiredtabwidthtd").style.display = "table-row";
+                        GetElementInTable(iter, "delimtd").style.display = "table-row";
+                        break;
                     default:
                         break;
                 }
@@ -222,8 +235,7 @@
                 //modifiers after the first use the previous mod's output as their input
                 if (iter == 0) {
                     input = GetElementInTable(iter, "input");
-                }
-                else {
+                } else {
                     input = GetElementInTable(iter - 1, "output");
                 }
 
@@ -313,6 +325,77 @@
                 case "sortnumstrings":
                     g_iter = iter;
                     return input.sort(compareNumSubstrings);
+                    break;
+                //what we put in one line depends on all the others
+                case "tabtable":
+                    GetElementInTable(iter, "output").style.tabSize = GetElementInTable(iter, "desiredtabwidth").value;
+                    var buffer = input;
+                    var tabwidth = GetElementInTable(iter, "desiredtabwidth").value;
+                    var delimiter = GetElementInTable(iter, "delim").value;
+                    if (!delimiter || !tabwidth || tabwidth == "0") {
+                        return [];
+                    }
+                    //get rid of existing tabs and spaces that come after delimiter
+                    for (var j = 0; j < linestoedit.length; j++) {
+                        var linenum = linestoedit[j];
+                        var segments = buffer[linenum].split(delimiter);
+                        //start at one to not disturb first segment's leading whitespace (this would be, say, typical code indentation)
+                        for (var k = 1; k < segments.length; k++) {
+                            segments[k] = segments[k].trim();
+                        }
+                        buffer[linenum] = segments.join(delimiter);
+                    }
+                    //have to loop this because each iteration of tabbing changes the targetcolumns values for subsequent segments
+                    var targetcolumns = [];
+                    var colno = 0;
+                    var maxsegments = 0;
+                    //find longest cell in the column and record length in targetcolumns
+                    do {
+                        for (var j = 0; j < linestoedit.length; j++) {
+                            var linenum = linestoedit[j];
+                            var line = buffer[linenum];
+                            var segments = line.split(delimiter);
+                            maxsegments = Math.max(segments.length, maxsegments);
+                            var segm = segments[colno];
+                            var reallength = segm.length + delimiter.length;
+                            var bestlength;
+                            if (targetcolumns[colno]) {
+                                bestlength = targetcolumns[colno];
+                            } else {
+                                bestlength = 0;
+                            }
+                            targetcolumns[colno] = Math.max(bestlength, reallength);
+                            //round to next tab interval
+                            targetcolumns[colno] = Math.ceil(targetcolumns[colno] / tabwidth) * tabwidth;
+                        }
+                        colno++;
+                        //-1 because last column doesn't need new tabs
+                    } while (colno < maxsegments - 1)
+                    debugger;
+                    colno = 0;
+                    do {
+                        for (var j = 0; j < linestoedit.length; j++) {
+                            var linenum = linestoedit[j];
+                            var line = buffer[linenum];
+                            var segments = line.split(delimiter);
+                            var segm = segments[colno].trim();
+                            //add new tabs to match targetcolumns
+                            var textcolumn = segm.length + delimiter.length;
+                            var firsttab = true;
+                            while (textcolumn < targetcolumns[colno]) {
+                                segments[colno + 1] = "\t" + segments[colno + 1];
+                                if (firsttab) {
+                                    textcolumn += +tabwidth - (+textcolumn % +tabwidth);
+                                } else {
+                                    textcolumn += +tabwidth;
+                                }
+                                firsttab = false;
+                            }
+                            buffer[linenum] = segments.join(delimiter);
+                        }
+                        colno++;
+                    } while (colno < targetcolumns.length)
+                    return buffer;
                     break;
                 case "prefixsuffix":
                     effectfunction = (line, iter) => { return GetElementInTable(iter, "prefix").value + line + GetElementInTable(iter, "suffix").value };
