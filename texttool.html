@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: October 26, 2025-->
+<!--Last time I remembered to update the build date: November 3, 2025-->
 <head>
 </head>
 <body>
@@ -39,7 +39,9 @@
                         <option value="colext">Column Extract</option>
                         <option value="delete">Delete</option>
                         <option value="insertnewline">Insert Newline</option>
+                        <option value="tabbrackets">Re-Tab By Brackets</option>
                         <option value="replacetable">Replace Table</option>
+                        <option value="reverse">Reverse Lines</option>
                         <option value="sort">Sort Alphabetically</option>
                         <option value="sortnumstrings">Sort by # Instances of Substring</option>
                         <option value="tabtable">Tab Table</option>
@@ -76,6 +78,22 @@
                 </td>
                 <td>
                     <textarea class="colno inputeventlisten" rows="1" cols="50"></textarea>
+                </td>
+            </tr>
+            <tr class="openbracketstd intermediary" style="display: none">
+                <td>
+                    <label for="openbrackets" title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label>
+                </td>
+                <td>
+                    <textarea class="openbrackets inputeventlisten" rows="1" cols="50">([{</textarea>
+                </td>
+            </tr>
+            <tr class="closebracketstd intermediary" style="display: none">
+                <td>
+                    <label for="closebrackets" title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label>
+                </td>
+                <td>
+                    <textarea class="closebrackets inputeventlisten" rows="1" cols="50">)]}</textarea>
                 </td>
             </tr>
             <tr class="delimtd intermediary" style="display: none">
@@ -206,6 +224,10 @@
                     case "tabtable":
                         GetElementInTable(iter, "desiredtabwidthtd").style.display = "table-row";
                         GetElementInTable(iter, "delimtd").style.display = "table-row";
+                        break;
+                    case "tabbrackets":
+                        GetElementInTable(iter, "openbracketstd").style.display = "table-row";
+                        GetElementInTable(iter, "closebracketstd").style.display = "table-row";
                         break;
                     default:
                         break;
@@ -371,7 +393,6 @@
                         colno++;
                         //-1 because last column doesn't need new tabs
                     } while (colno < maxsegments - 1)
-                    debugger;
                     colno = 0;
                     do {
                         for (var j = 0; j < linestoedit.length; j++) {
@@ -428,6 +449,35 @@
                         result = result.concat(buffer);
                     }
                     return result;
+                    break;
+                case "reverse":
+                    return input.reverse();
+                    break;
+                case "tabbrackets":
+                    var depth = 0;
+                    var openchars = GetElementInTable(iter, "openbrackets").value;
+                    var closechars = GetElementInTable(iter, "closebrackets").value;
+                    for (var j = 0; j < linestoedit.length; j++) {
+                        var linenum = linestoedit[j];
+                        var line = output[linenum];
+                        //must find closing brackets before adding tabs
+                        for (var c = 0; c < closechars.length; c++) {
+                            var cchar = closechars[c];
+                            var hits = line.split(cchar).length - 1;
+                            depth -= hits;
+                        }
+                        //add tabs
+                        for (var k = 0; k < depth; k++) {
+                            output[linenum] = "\t" + output[linenum];
+                        }
+                        //find opening brackets
+                        for (var c = 0; c < openchars.length; c++) {
+                            var ochar = openchars[c];
+                            var hits = line.split(ochar).length - 1;
+                            depth += hits;
+                        }
+                    }
+                    return output;
                     break;
                 default:
                     console.log("Unknown effect");
