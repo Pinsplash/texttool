@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: November 21, 2025-->
+<!--Last time I remembered to update the build date: March 6, 2026-->
 <head>
 </head>
 <body>
@@ -17,8 +17,8 @@
                         <option value="duplicatelines">Duplicate Lines</option>
                         <option value="emptylines">Empty Lines</option>
                         <option value="evenlines">Even Lines</option>
-                        <option value="withtoken">Lines with Token</option>
-                        <option value="without_token">Lines without Token</option>
+                        <option value="withtokens">Lines with Tokens</option>
+                        <option value="without_tokens">Lines without Tokens</option>
                         <option value="oddlines">Odd Lines</option>
                         <option value="repeatlines">Repeat Lines</option>
                         <option value="uniquelines">Unique Lines</option>
@@ -39,6 +39,8 @@
                         <option value="colext">Column Extract</option>
                         <option value="delete">Delete</option>
                         <option value="insertnewline">Insert Newline</option>
+                        <option value="makelowercase">Make Lowercase</option>
+                        <option value="makeuppercase">Make Uppercase</option>
                         <option value="numberlines">Number Lines</option>
                         <option value="tabbrackets">Re-Tab By Brackets</option>
                         <option value="replacetable">Replace Table</option>
@@ -105,12 +107,12 @@
                     <textarea class="delim inputeventlisten" rows="1" cols="50"></textarea>
                 </td>
             </tr>
-            <tr class="tokentd intermediary" style="display: none">
+            <tr class="tokenstd intermediary" style="display: none">
                 <td>
-                    <label for="token">Token:</label>
+                    <label for="tokens">Tokens:</label>
                 </td>
                 <td>
-                    <textarea class="token inputeventlisten" rows="1" cols="50"></textarea>
+                    <textarea class="tokens inputeventlisten" rows="10" cols="50"></textarea>
                 </td>
             </tr>
             <tr class="prefixtd intermediary" style="display: none">
@@ -236,7 +238,7 @@
                         GetElementInTable(iter, "delimtd").style.display = "table-row";
                         break;
                     case "sortnumstrings":
-                        GetElementInTable(iter, "tokentd").style.display = "table-row";
+                        GetElementInTable(iter, "tokenstd").style.display = "table-row";
                         break;
                     case "tabtable":
                         GetElementInTable(iter, "desiredtabwidthtd").style.display = "table-row";
@@ -259,9 +261,9 @@
             for (var iter = 0; iter < targetmodeelems.length; iter++) {
                 var targetmode = GetElementInTable(iter, "targetmodeselect");
                 switch (targetmode.value) {
-                    case "withtoken":
-                    case "without_token":
-                        GetElementInTable(iter, "tokentd").style.display = "table-row";
+                    case "withtokens":
+                    case "without_tokens":
+                        GetElementInTable(iter, "tokenstd").style.display = "table-row";
                         break;
                     default:
                         break;
@@ -306,11 +308,29 @@
                 case "emptylines":
                     targetfunction = (line, iter, input, linenum) => { return line.length == 0 };
                     break;
-                case "withtoken":
-                    targetfunction = (line, iter, input, linenum) => { return line.includes(GetElementInTable(iter, "token").value) == true };
+                case "withtokens":
+                    targetfunction = (line, iter, input, linenum) => {
+                        if (GetElementInTable(iter, "tokens") == null)
+                            return false;
+                        var tokens = GetElementInTable(iter, "tokens").value.split("\n");
+                        for (var i = 0; i < tokens.length; i++) {
+                            if (line.includes(tokens[i]))
+                                return true;
+                        }
+                        return false;
+                    };
                     break;
-                case "without_token":
-                    targetfunction = (line, iter, input, linenum) => { return line.includes(GetElementInTable(iter, "token").value) == false };
+                case "without_tokens":
+                    targetfunction = (line, iter, input, linenum) => {
+                        if (GetElementInTable(iter, "tokens") == null)
+                            return false;
+                        var tokens = GetElementInTable(iter, "tokens").value.split("\n");
+                        for (var i = 0; i < tokens.length; i++) {
+                            if (line.includes(tokens[i]))
+                                return false;
+                        }
+                        return true;
+                    };
                     break;
                 case "evenlines":
                     targetfunction = (line, iter, input, linenum) => { return linenum % 2 == 0 };
@@ -333,8 +353,7 @@
         }
         var g_iter;
         function compareNumSubstrings(a, b) {
-            debugger;
-            var token = GetElementInTable(g_iter, "token").value;
+            var token = GetElementInTable(g_iter, "tokens").value;
             var a_count = a.split(token).length - 1;
             var b_count = b.split(token).length - 1;
             if (a_count < b_count) {
@@ -450,6 +469,12 @@
                     break;
                 case "camelseparate":
                     effectfunction = (line, linenum, iter) => { return line.replace(/([A-Z])/g, " $1").trim() };
+                    break;
+                case "makelowercase":
+                    effectfunction = (line, linenum, iter) => { return line.toLowerCase() };
+                    break;
+                case "makeuppercase":
+                    effectfunction = (line, linenum, iter) => { return line.toUpperCase() };
                     break;
                 case "delete":
                     effectfunction = (line, linenum, iter) => { return "texttoolinternalsignal_delete" };
