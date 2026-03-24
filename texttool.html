@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: March 6, 2026-->
+<!--Last time I remembered to update the build date: March 24, 2026-->
 <head>
+    <title></title>
 </head>
 <body>
     <form name="form" class="form">
@@ -12,17 +13,19 @@
                     <label for="targetmodeselect" title="Select what text to target with the effect">Target:</label>
                 </td>
                 <td>
-                    <select name="targetmodeselect" class="targetmodeselect">
-                        <option value="alltext">All Text</option>
-                        <option value="duplicatelines">Duplicate Lines</option>
-                        <option value="emptylines">Empty Lines</option>
-                        <option value="evenlines">Even Lines</option>
-                        <option value="withtokens">Lines with Tokens</option>
-                        <option value="without_tokens">Lines without Tokens</option>
-                        <option value="oddlines">Odd Lines</option>
-                        <option value="repeatlines">Repeat Lines</option>
-                        <option value="uniquelines">Unique Lines</option>
-                    </select>
+                    <label>
+                        <select name="targetmodeselect" id="targetmodeselect">
+                            <option value="alltext">All Text</option>
+                            <option value="duplicatelines">Duplicate Lines</option>
+                            <option value="emptylines">Empty Lines</option>
+                            <option value="evenlines">Even Lines</option>
+                            <option value="withtokens">Lines with Tokens</option>
+                            <option value="without_tokens">Lines without Tokens</option>
+                            <option value="oddlines">Odd Lines</option>
+                            <option value="repeatlines">Repeat Lines</option>
+                            <option value="uniquelines">Unique Lines</option>
+                        </select>
+                    </label>
                 </td>
             </tr>
             <tr>
@@ -30,25 +33,27 @@
                     <label for="effectselect" title="Select effect to apply to targeted text">Effect:</label>
                 </td>
                 <td>
-                    <select name="effectselect" class="effectselect">
-                        <option value="copy">Copy (Debug)</option>
-                        <option value="prefixsuffix">Add Prefix/Suffix</option>
-                        <option value="allcombos">All Combinations</option>
-                        <option value="camelseparate">Camel Case Separate</option>
-                        <option value="clear">Clear</option>
-                        <option value="colext">Column Extract</option>
-                        <option value="delete">Delete</option>
-                        <option value="insertnewline">Insert Newline</option>
-                        <option value="makelowercase">Make Lowercase</option>
-                        <option value="makeuppercase">Make Uppercase</option>
-                        <option value="numberlines">Number Lines</option>
-                        <option value="tabbrackets">Re-Tab By Brackets</option>
-                        <option value="replacetable">Replace Table</option>
-                        <option value="reverse">Reverse Lines</option>
-                        <option value="sort">Sort Alphabetically</option>
-                        <option value="sortnumstrings">Sort by # Instances of Substring</option>
-                        <option value="tabtable">Tab Table</option>
-                    </select>
+                    <label>
+                        <select name="effectselect" id="effectselect">
+                            <option value="copy">Copy (Debug)</option>
+                            <option value="prefixsuffix">Add Prefix/Suffix</option>
+                            <option value="allcombos">All Combinations</option>
+                            <option value="camelseparate">Camel Case Separate</option>
+                            <option value="clear">Clear</option>
+                            <option value="colext">Column Extract</option>
+                            <option value="delete">Delete</option>
+                            <option value="insertnewline">Insert Newline</option>
+                            <option value="makelowercase">Make Lowercase</option>
+                            <option value="makeuppercase">Make Uppercase</option>
+                            <option value="numberlines">Number Lines</option>
+                            <option value="tabbrackets">Re-Tab By Brackets</option>
+                            <option value="replacetable">Replace Table</option>
+                            <option value="reverse">Reverse Lines</option>
+                            <option value="sort">Sort Alphabetically</option>
+                            <option value="sortnumstrings">Sort by # Instances of Substring</option>
+                            <option value="tabtable">Tab Table</option>
+                        </select>
+                    </label>
                 </td>
             </tr>
             <tr class="inputtd">
@@ -56,7 +61,9 @@
                     <label for="input" title="Put original text here">Input:</label>
                 </td>
                 <td>
-                    <textarea class="input inputeventlisten" rows="10" cols="50"></textarea>
+                    <label>
+                        <textarea id="input" class="inputeventlisten" rows="10" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="replacetabletd intermediary" style="display: none">
@@ -64,7 +71,9 @@
                     <label for="replacetable" title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label>
                 </td>
                 <td>
-                    <textarea class="replacetable inputeventlisten" rows="10" cols="50"></textarea>
+                    <label>
+                        <textarea id="replacetable" class="inputeventlisten" rows="10" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="desiredtabwidthtd intermediary" style="display: none">
@@ -72,7 +81,9 @@
                     <label for="desiredtabwidth" title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label>
                 </td>
                 <td>
-                    <textarea class="desiredtabwidth inputeventlisten" rows="1" cols="50">4</textarea>
+                    <label>
+                        <textarea id="desiredtabwidth" class="inputeventlisten" rows="1" cols="50">4</textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="colnotd intermediary" style="display: none">
@@ -80,7 +91,9 @@
                     <label for="colno" title="When interpreting text as a table, which column to extract">Column Number:</label>
                 </td>
                 <td>
-                    <textarea class="colno inputeventlisten" rows="1" cols="50"></textarea>
+                    <label>
+                        <textarea id="colno" class="inputeventlisten" rows="1" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="openbracketstd intermediary" style="display: none">
@@ -88,7 +101,9 @@
                     <label for="openbrackets" title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label>
                 </td>
                 <td>
-                    <textarea class="openbrackets inputeventlisten" rows="1" cols="50">([{</textarea>
+                    <label>
+                        <textarea id="openbrackets" class="inputeventlisten" rows="1" cols="50">([{</textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="closebracketstd intermediary" style="display: none">
@@ -96,7 +111,9 @@
                     <label for="closebrackets" title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label>
                 </td>
                 <td>
-                    <textarea class="closebrackets inputeventlisten" rows="1" cols="50">)]}</textarea>
+                    <label>
+                        <textarea id="closebrackets" class="inputeventlisten" rows="1" cols="50">)]}</textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="delimtd intermediary" style="display: none">
@@ -104,7 +121,9 @@
                     <label for="delim" title="A character or string that indicates where to separate text">Delimiter:</label>
                 </td>
                 <td>
-                    <textarea class="delim inputeventlisten" rows="1" cols="50"></textarea>
+                    <label>
+                        <textarea id="delim" class="inputeventlisten" rows="1" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="tokenstd intermediary" style="display: none">
@@ -112,7 +131,9 @@
                     <label for="tokens">Tokens:</label>
                 </td>
                 <td>
-                    <textarea class="tokens inputeventlisten" rows="10" cols="50"></textarea>
+                    <label>
+                        <textarea id="tokens" class="inputeventlisten" rows="10" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="prefixtd intermediary" style="display: none">
@@ -120,7 +141,9 @@
                     <label for="prefix" title="Prefix to add to text">Prefix:</label>
                 </td>
                 <td>
-                    <textarea class="prefix inputeventlisten" rows="1" cols="50"></textarea>
+                    <label>
+                        <textarea id="prefix" class="inputeventlisten" rows="1" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="suffixtd intermediary" style="display: none">
@@ -128,7 +151,9 @@
                     <label for="suffix" title="Suffix to add to text">Suffix:</label>
                 </td>
                 <td>
-                    <textarea class="suffix inputeventlisten" rows="1" cols="50"></textarea>
+                    <label>
+                        <textarea id="suffix" class="inputeventlisten" rows="1" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <tr class="startattd intermediary" style="display: none">
@@ -136,7 +161,9 @@
                     <label for="startat" title="When counting something, the number to start from">Start at:</label>
                 </td>
                 <td>
-                    <textarea class="startat inputeventlisten" rows="1" cols="50"></textarea>
+                    <label>
+                        <textarea id="startat" class="inputeventlisten" rows="1" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
             <!--
@@ -152,7 +179,9 @@
                     <label for="output" title="Edited text appears here!">Output:</label>
                 </td>
                 <td>
-                    <textarea class="output" rows="10" cols="50"></textarea>
+                    <label>
+                        <textarea id="output" rows="10" cols="50"></textarea>
+                    </label>
                 </td>
             </tr>
         </table>
@@ -160,42 +189,42 @@
     </form>
     <script>
         AddListeners();
+        let g_ModNum;
         function AddListeners() {
-            var inputlistenelems = document.getElementsByClassName("inputeventlisten");
-            for (const el of inputlistenelems) {
-                el.addEventListener("input", UpdateAllTextBoxes);
+            let InputListenElems = document.getElementsByClassName("inputeventlisten");
+            for (const elem of InputListenElems) {
+                elem.addEventListener("input", UpdateAllTextBoxes);
             }
-            var effectselectelems = document.getElementsByClassName("effectselect");
-            for (const el of effectselectelems) {
-                el.onchange = UpdateParameters;
+            let EffectSelectElems = document.getElementsByClassName("effectselect");
+            for (const elem of EffectSelectElems) {
+                elem.onchange = UpdateParameters;
             }
-            var targetmodeselectelems = document.getElementsByClassName("targetmodeselect");
-            for (const el of targetmodeselectelems) {
-                el.onchange = UpdateParameters;
+            let TargetModeSelectElems = document.getElementsByClassName("targetmodeselect");
+            for (const elem of TargetModeSelectElems) {
+                elem.onchange = UpdateParameters;
             }
         }
         function UpdateAllTextBoxes() {
             UpdateTextBoxes(0);
         }
-        function AddToChain(e) {
-            var tableelems = document.getElementsByClassName("copyabletable");
-            var lasttable = tableelems[tableelems.length - 1];
-            var clone1 = lasttable.cloneNode(true);
-            document.getElementsByClassName("form")[0].appendChild(clone1);
-            var clone2 = e.cloneNode(true);
-            document.getElementsByClassName("form")[0].appendChild(clone2);
+        function AddToChain(ModTable) {
+            let TableElems = document.getElementsByClassName("copyabletable");
+            let LastTable = TableElems[TableElems.length - 1];
+            let Clone1 = LastTable.cloneNode(true);
+            document.getElementsByClassName("form")[0].appendChild(Clone1);
+            let Clone2 = ModTable.cloneNode(true);
+            document.getElementsByClassName("form")[0].appendChild(Clone2);
             //delete the input box we just cloned - modifiers after the first use the previous mod's output as their input
-            var inputelems = document.getElementsByClassName("inputtd");
-            if (inputelems.length > 1) {
-                var elemnum = inputelems.length - 1;
-                var lastinput = inputelems[elemnum];
-                lastinput.remove();
+            let InputElems = document.getElementsByClassName("inputtd");
+            if (InputElems.length > 1) {
+                let ElemNum = InputElems.length - 1;
+                let LastInput = InputElems[ElemNum];
+                LastInput.remove();
             }
             AddListeners();
         }
-        function GetElementInTable(iter, elementname) {
-            var table = document.getElementsByClassName("copyabletable")[iter];
-            var elem = table.getElementsByClassName(elementname)[0];
+        function GetElementInTable(ModNum, ElementName) {
+            let Table = document.getElementsByClassName("copyabletable")[ModNum];
             /*
             if (table) {
                 console.log("copyabletable #" + iter + " exists");
@@ -203,347 +232,341 @@
                 console.log("copyabletable #" + iter + " did not exist");
             }
             if (elem) {
-                console.log("element " + elementname + " exists");
+                console.log("element " + ElementName + " exists");
             } else {
-                console.log("element " + elementname + " did not exist");
+                console.log("element " + ElementName + " did not exist");
             }
             */
-            return elem;
+            return Table.getElementsByClassName(ElementName)[0];
         }
         function UpdateParameters() {
-            var tableelems = document.getElementsByClassName("copyabletable");
-            for (var iter = 0; iter < tableelems.length; iter++) {
+            let TableElems = document.getElementsByClassName("copyabletable");
+            for (let iMod = 0; iMod < TableElems.length; iMod++) {
                 //some modes have their own intermediary boxes to set how they work
                 //hide everything by default, re-show based on mode
-                var intermedelems = tableelems[iter].getElementsByClassName("intermediary");
-                for (const el of intermedelems) {
-                    el.style.display = "none";
+                let IntermedElems = TableElems[iMod].getElementsByClassName("intermediary");
+                for (const elem of IntermedElems) {
+                    elem.style.display = "none";
                 }
 
-                var effect = GetElementInTable(iter, "effectselect");
-                switch (effect.value) {
+                let Effect = GetElementInTable(iMod, "effectselect");
+                switch (Effect.value) {
                     case "prefixsuffix":
-                        GetElementInTable(iter, "prefixtd").style.display = "table-row";
-                        GetElementInTable(iter, "suffixtd").style.display = "table-row";
+                        GetElementInTable(iMod, "prefixtd").style.display = "table-row";
+                        GetElementInTable(iMod, "suffixtd").style.display = "table-row";
                         break;
                     case "colext":
-                        GetElementInTable(iter, "colnotd").style.display = "table-row";
-                        GetElementInTable(iter, "delimtd").style.display = "table-row";
+                        GetElementInTable(iMod, "colnotd").style.display = "table-row";
+                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
                         break;
                     case "replacetable":
-                        GetElementInTable(iter, "replacetabletd").style.display = "table-row";
+                        GetElementInTable(iMod, "replacetabletd").style.display = "table-row";
                         break;
                     case "insertnewline":
                     case "allcombos":
-                        GetElementInTable(iter, "delimtd").style.display = "table-row";
+                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
                         break;
                     case "sortnumstrings":
-                        GetElementInTable(iter, "tokenstd").style.display = "table-row";
+                        GetElementInTable(iMod, "tokenstd").style.display = "table-row";
                         break;
                     case "tabtable":
-                        GetElementInTable(iter, "desiredtabwidthtd").style.display = "table-row";
-                        GetElementInTable(iter, "delimtd").style.display = "table-row";
+                        GetElementInTable(iMod, "desiredtabwidthtd").style.display = "table-row";
+                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
                         break;
                     case "tabbrackets":
-                        GetElementInTable(iter, "openbracketstd").style.display = "table-row";
-                        GetElementInTable(iter, "closebracketstd").style.display = "table-row";
+                        GetElementInTable(iMod, "openbracketstd").style.display = "table-row";
+                        GetElementInTable(iMod, "closebracketstd").style.display = "table-row";
                         break;
                     case "numberlines":
-                        GetElementInTable(iter, "delimtd").style.display = "table-row";
-                        GetElementInTable(iter, "startattd").style.display = "table-row";
+                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
+                        GetElementInTable(iMod, "startattd").style.display = "table-row";
                         break;
                     default:
                         break;
                 }
-                UpdateTextBoxes(iter);
+                UpdateTextBoxes(iMod);
             }
-            var targetmodeelems = document.getElementsByClassName("targetmodeselect");
-            for (var iter = 0; iter < targetmodeelems.length; iter++) {
-                var targetmode = GetElementInTable(iter, "targetmodeselect");
-                switch (targetmode.value) {
+            let TargetModeElems = document.getElementsByClassName("targetmodeselect");
+            for (let iElem = 0; iElem < TargetModeElems.length; iElem++) {
+                let TargetMode = GetElementInTable(iElem, "targetmodeselect");
+                switch (TargetMode.value) {
                     case "withtokens":
                     case "without_tokens":
-                        GetElementInTable(iter, "tokenstd").style.display = "table-row";
+                        GetElementInTable(iElem, "tokenstd").style.display = "table-row";
                         break;
                     default:
                         break;
                 }
-                UpdateTextBoxes(iter);
+                UpdateTextBoxes(iElem);
             }
         }
-        function UpdateTextBoxes(mod_num) {
-            var tableelems = document.getElementsByClassName("copyabletable");
-            var targetmodeselectelems = document.getElementsByClassName("targetmodeselect");
-            for (var iter = mod_num; iter < tableelems.length; iter++) {
-                var output = GetElementInTable(iter, "output");
-                var input;
+        function UpdateTextBoxes(ModNum) {
+            let TableElems = document.getElementsByClassName("copyabletable");
+            let TargetModeSelectElems = document.getElementsByClassName("targetmodeselect");
+            for (let iMod = ModNum; iMod < TableElems.length; iMod++) {
+                let Output = GetElementInTable(iMod, "output");
+                let Input;
                 //modifiers after the first use the previous mod's output as their input
-                if (iter == 0) {
-                    input = GetElementInTable(iter, "input");
+                if (iMod === 0) {
+                    Input = GetElementInTable(iMod, "input");
                 } else {
-                    input = GetElementInTable(iter - 1, "output");
+                    Input = GetElementInTable(iMod - 1, "output");
                 }
 
-                var pieces = input.value.split("\n");
-                var targetmode = targetmodeselectelems[iter];
-                var linestoedit = GetTargetLineNums(pieces, targetmode, iter);
-                output.value = EditLines(pieces, iter, linestoedit).join("\n");
+                let Pieces = Input.value.split("\n");
+                let TargetMode = TargetModeSelectElems[iMod];
+                let LinesToEdit = GetTargetLineNums(Pieces, TargetMode, iMod);
+                Output.value = EditLines(Pieces, iMod, LinesToEdit).join("\n");
             }
         }
         //lines not targeted by the target mode are left undisturbed
         //create a list of line numbers we want to edit
-        function GetTargetLineNums(input, targetmode, iter) {
-            var targetfunction;
-            var numbers = [];
-            switch (targetmode.value) {
+        function GetTargetLineNums(Input, TargetMode, ModNum) {
+            let TargetFunction;
+            let Numbers = [];
+            switch (TargetMode.value) {
                 case "duplicatelines":
-                    targetfunction = (line, iter, input, linenum) => { return input.indexOf(line, input.indexOf(line) + 1) >= 0 && line != "<BR>" };
+                    TargetFunction = (Line, ModNum, Input) => { return Input.indexOf(Line, Input.indexOf(Line) + 1) >= 0 && Line !== "<BR>" };
                     break;
                 case "repeatlines":
-                    targetfunction = (line, iter, input, linenum) => { return input.indexOf(line) != linenum && line != "<BR>" };
+                    TargetFunction = (Line, ModNum, Input, LineNum) => { return Input.indexOf(Line) !== LineNum && Line !== "<BR>" };
                     break;
                 case "uniquelines":
-                    targetfunction = (line, iter, input, linenum) => { return input.indexOf(line, input.indexOf(line) + 1) == -1 && line != "<BR>" };
+                    TargetFunction = (Line, ModNum, Input) => { return Input.indexOf(Line, Input.indexOf(Line) + 1) === -1 && Line !== "<BR>" };
                     break;
                 case "emptylines":
-                    targetfunction = (line, iter, input, linenum) => { return line.length == 0 };
+                    TargetFunction = (Line) => { return Line.length === 0 };
                     break;
                 case "withtokens":
-                    targetfunction = (line, iter, input, linenum) => {
-                        if (GetElementInTable(iter, "tokens") == null)
+                    TargetFunction = (Line, ModNum) => {
+                        if (GetElementInTable(ModNum, "tokens") == null)
                             return false;
-                        var tokens = GetElementInTable(iter, "tokens").value.split("\n");
-                        for (var i = 0; i < tokens.length; i++) {
-                            if (line.includes(tokens[i]))
+                        let Tokens = GetElementInTable(ModNum, "tokens").value.split("\n");
+                        for (let iToken = 0; iToken < Tokens.length; iToken++) {
+                            if (Line.includes(Tokens[iToken]))
                                 return true;
                         }
                         return false;
                     };
                     break;
                 case "without_tokens":
-                    targetfunction = (line, iter, input, linenum) => {
-                        if (GetElementInTable(iter, "tokens") == null)
+                    TargetFunction = (Line, ModNum) => {
+                        if (GetElementInTable(ModNum, "tokens") == null)
                             return false;
-                        var tokens = GetElementInTable(iter, "tokens").value.split("\n");
-                        for (var i = 0; i < tokens.length; i++) {
-                            if (line.includes(tokens[i]))
+                        let Tokens = GetElementInTable(ModNum, "tokens").value.split("\n");
+                        for (let iToken = 0; iToken < Tokens.length; iToken++) {
+                            if (Line.includes(Tokens[iToken]))
                                 return false;
                         }
                         return true;
                     };
                     break;
                 case "evenlines":
-                    targetfunction = (line, iter, input, linenum) => { return linenum % 2 == 0 };
+                    TargetFunction = (Line, ModNum, Input, LineNum) => { return LineNum % 2 === 0 };
                     break;
                 case "oddlines":
-                    targetfunction = (line, iter, input, linenum) => { return linenum % 2 == 1 };
+                    TargetFunction = (Line, ModNum, Input, LineNum) => { return LineNum % 2 === 1 };
                     break;
                 default:
                     console.log("Unknown target mode");
+                    //fallthrough
                 case "alltext":
-                    targetfunction = (line, iter, input) => { return true };
+                    TargetFunction = () => { return true };
                     break;
             }
-            for (var j = 0; j < input.length; j++) {
-                if (targetfunction(input[j], iter, input, j)) {
-                    numbers.push(j);
+            for (let iLine = 0; iLine < Input.length; iLine++) {
+                if (TargetFunction(Input[iLine], ModNum, Input, iLine)) {
+                    Numbers.push(iLine);
                 }
             }
-            return numbers;
+            return Numbers;
         }
-        var g_iter;
         function compareNumSubstrings(a, b) {
-            var token = GetElementInTable(g_iter, "tokens").value;
-            var a_count = a.split(token).length - 1;
-            var b_count = b.split(token).length - 1;
-            if (a_count < b_count) {
+            let Tokens = GetElementInTable(g_ModNum, "tokens").value;
+            let A_Count = a.split(Tokens).length - 1;
+            let B_Count = b.split(Tokens).length - 1;
+            if (A_Count < B_Count) {
                 return -1;
-            } else if (a_count > b_count) {
+            } else if (A_Count > B_Count) {
                 return 1;
             }
             return 0;
         }
-        function EditLines(input, iter, linestoedit) {
-            var output = input;
-            var effectfunction;
-            var effect = GetElementInTable(iter, "effectselect");
-            switch (effect.value) {
+        function EditLines(Input, ModNum, LinesToEdit) {
+            let Output = Input;
+            let EffectFunction;
+            let Effect = GetElementInTable(ModNum, "effectselect");
+            switch (Effect.value) {
                 case "insertnewline":
-                    effectfunction = (line, linenum, iter) => { return line.replaceAll(GetElementInTable(iter, "delim").value, "\n") };
+                    EffectFunction = (Line, LineNum, ModNum) => { return Line.replaceAll(GetElementInTable(ModNum, "delim").value, "\n") };
                     break;
                 case "replacetable":
-                    effectfunction = (line, linenum, iter) => {
-                        var table = GetElementInTable(iter, "replacetable").value.split("\n");
-                        for (var i = 0; i + 1 < table.length; i += 2) {
-                            line = line.replaceAll(table[i], table[i + 1]);
+                    EffectFunction = (Line, LineNum, ModNum) => {
+                        let Table = GetElementInTable(ModNum, "replacetable").value.split("\n");
+                        for (let iPair = 0; iPair + 1 < Table.length; iPair += 2) {
+                            Line = Line.replaceAll(Table[iPair], Table[iPair + 1]);
                         }
-                        return line;
+                        return Line;
                     }
                     break;
                 //can't really think of how i would go about sorting a subset of the input, but can't think of a very good use case either
                 case "sort":
-                    return input.sort();
-                    break;
+                    return Input.sort();
                 case "sortnumstrings":
-                    g_iter = iter;
-                    return input.sort(compareNumSubstrings);
-                    break;
+                    g_ModNum = ModNum;
+                    return Input.sort(compareNumSubstrings);
                 //what we put in one line depends on all the others
-                case "tabtable":
-                    GetElementInTable(iter, "output").style.tabSize = GetElementInTable(iter, "desiredtabwidth").value;
-                    var buffer = input;
-                    var tabwidth = GetElementInTable(iter, "desiredtabwidth").value;
-                    var delimiter = GetElementInTable(iter, "delim").value;
-                    if (!delimiter || !tabwidth || tabwidth == "0") {
+                case "tabtable": {
+                    GetElementInTable(ModNum, "output").style.tabSize = GetElementInTable(ModNum, "desiredtabwidth").value;
+                    let Buffer = Input;
+                    let TabWidth = GetElementInTable(ModNum, "desiredtabwidth").value;
+                    let Delimiter = GetElementInTable(ModNum, "delim").value;
+                    if (!Delimiter || !TabWidth || TabWidth === "0") {
                         return [];
                     }
                     //get rid of existing tabs and spaces that come after delimiter
-                    for (var j = 0; j < linestoedit.length; j++) {
-                        var linenum = linestoedit[j];
-                        var segments = buffer[linenum].split(delimiter);
+                    for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
+                        let LineNum = LinesToEdit[iLineNum];
+                        let Segments = Buffer[LineNum].split(Delimiter);
                         //start at one to not disturb first segment's leading whitespace (this would be, say, typical code indentation)
-                        for (var k = 1; k < segments.length; k++) {
-                            segments[k] = segments[k].trim();
+                        for (let iSegment = 1; iSegment < Segments.length; iSegment++) {
+                            Segments[iSegment] = Segments[iSegment].trim();
                         }
-                        buffer[linenum] = segments.join(delimiter);
+                        Buffer[LineNum] = Segments.join(Delimiter);
                     }
                     //have to loop this because each iteration of tabbing changes the targetcolumns values for subsequent segments
-                    var targetcolumns = [];
-                    var colno = 0;
-                    var maxsegments = 0;
+                    let TargetColumns = [];
+                    let ColNum = 0;
+                    let MaxSegments = 0;
                     //find longest cell in the column and record length in targetcolumns
                     do {
-                        for (var j = 0; j < linestoedit.length; j++) {
-                            var linenum = linestoedit[j];
-                            var line = buffer[linenum];
-                            var segments = line.split(delimiter);
-                            maxsegments = Math.max(segments.length, maxsegments);
-                            var segm = segments[colno];
-                            var reallength = segm.length + delimiter.length;
-                            var bestlength;
-                            if (targetcolumns[colno]) {
-                                bestlength = targetcolumns[colno];
+                        for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
+                            let LineNum = LinesToEdit[iLineNum];
+                            let Line = Buffer[LineNum];
+                            let Segments = Line.split(Delimiter);
+                            MaxSegments = Math.max(Segments.length, MaxSegments);
+                            let InnerSegment = Segments[ColNum];
+                            let RealLength = InnerSegment.length + Delimiter.length;
+                            let BestLength;
+                            if (TargetColumns[ColNum]) {
+                                BestLength = TargetColumns[ColNum];
                             } else {
-                                bestlength = 0;
+                                BestLength = 0;
                             }
-                            targetcolumns[colno] = Math.max(bestlength, reallength);
+                            TargetColumns[ColNum] = Math.max(BestLength, RealLength);
                             //round to next tab interval
-                            targetcolumns[colno] = Math.ceil(targetcolumns[colno] / tabwidth) * tabwidth;
+                            TargetColumns[ColNum] = Math.ceil(TargetColumns[ColNum] / TabWidth) * TabWidth;
                         }
-                        colno++;
+                        ColNum++;
                         //-1 because last column doesn't need new tabs
-                    } while (colno < maxsegments - 1)
-                    colno = 0;
+                    } while (ColNum < MaxSegments - 1)
+                    ColNum = 0;
                     do {
-                        for (var j = 0; j < linestoedit.length; j++) {
-                            var linenum = linestoedit[j];
-                            var line = buffer[linenum];
-                            var segments = line.split(delimiter);
-                            var segm = segments[colno].trim();
+                        for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
+                            let LineNum = LinesToEdit[iLineNum];
+                            let Line = Buffer[LineNum];
+                            let Segments = Line.split(Delimiter);
+                            let InnerSegment = Segments[ColNum].trim();
                             //add new tabs to match targetcolumns
-                            var textcolumn = segm.length + delimiter.length;
-                            var firsttab = true;
-                            while (textcolumn < targetcolumns[colno]) {
-                                segments[colno + 1] = "\t" + segments[colno + 1];
-                                if (firsttab) {
-                                    textcolumn += +tabwidth - (+textcolumn % +tabwidth);
+                            let TextColumn = InnerSegment.length + Delimiter.length;
+                            let FirsTab = true;
+                            while (TextColumn < TargetColumns[ColNum]) {
+                                Segments[ColNum + 1] = "\t" + Segments[ColNum + 1];
+                                if (FirsTab) {
+                                    TextColumn += +TabWidth - (+TextColumn % +TabWidth);
                                 } else {
-                                    textcolumn += +tabwidth;
+                                    TextColumn += +TabWidth;
                                 }
-                                firsttab = false;
+                                FirsTab = false;
                             }
-                            buffer[linenum] = segments.join(delimiter);
+                            Buffer[LineNum] = Segments.join(Delimiter);
                         }
-                        colno++;
-                    } while (colno < targetcolumns.length)
-                    return buffer;
-                    break;
+                        ColNum++;
+                    } while (ColNum < TargetColumns.length)
+                    return Buffer;
+                }
                 case "prefixsuffix":
-                    effectfunction = (line, linenum, iter) => { return GetElementInTable(iter, "prefix").value + line + GetElementInTable(iter, "suffix").value };
+                    EffectFunction = (Line, LineNum, ModNum) => { return GetElementInTable(ModNum, "prefix").value + Line + GetElementInTable(ModNum, "suffix").value };
                     break;
                 case "colext":
-                    effectfunction = (line, linenum, iter) => {
-                        var segments = line.split(GetElementInTable(iter, "delim").value);
-                        return segments[Math.min(segments.length - 1, GetElementInTable(iter, "colno").value)];
+                    EffectFunction = (Line, LineNum, ModNum) => {
+                        let Segments = Line.split(GetElementInTable(ModNum, "delim").value);
+                        return Segments[Math.min(Segments.length - 1, GetElementInTable(ModNum, "colno").value)];
                     }
                     break;
                 case "camelseparate":
-                    effectfunction = (line, linenum, iter) => { return line.replace(/([A-Z])/g, " $1").trim() };
+                    EffectFunction = (Line) => { return Line.replace(/([A-Z])/g, " $1").trim() };
                     break;
                 case "makelowercase":
-                    effectfunction = (line, linenum, iter) => { return line.toLowerCase() };
+                    EffectFunction = (Line) => { return Line.toLowerCase() };
                     break;
                 case "makeuppercase":
-                    effectfunction = (line, linenum, iter) => { return line.toUpperCase() };
+                    EffectFunction = (Line) => { return Line.toUpperCase() };
                     break;
                 case "delete":
-                    effectfunction = (line, linenum, iter) => { return "texttoolinternalsignal_delete" };
+                    EffectFunction = () => { return "texttoolinternalsignal_delete" };
                     break;
                 case "clear":
-                    effectfunction = (line, linenum, iter) => { return "" };
+                    EffectFunction = () => { return "" };
                     break;
                 case "allcombos":
-                    var buffer = [];
-                    var result = [];
-                    for (i = 0; i < input.length; i++) {
-                        buffer = [input[i]];
-                        var index = 0;
-                        while (result[index]) {
-                            buffer.push("" + result[index] + GetElementInTable(iter, "delim").value + input[i]);
-                            index++;
+                    let Buffer = [];
+                    let Results = [];
+                    for (let i = 0; i < Input.length; i++) {
+                        Buffer = [Input[i]];
+                        for (let iResult = 0; iResult < Results.length; iResult++) {
+                            Buffer.push("" + Results[iResult] + GetElementInTable(ModNum, "delim").value + Input[i]);
                         }
-                        result = result.concat(buffer);
+                        Results = Results.concat(Buffer);
                     }
-                    return result;
-                    break;
+                    return Results;
                 case "reverse":
-                    return input.reverse();
-                    break;
+                    return Input.reverse();
                 case "tabbrackets":
-                    var depth = 0;
-                    var openchars = GetElementInTable(iter, "openbrackets").value;
-                    var closechars = GetElementInTable(iter, "closebrackets").value;
-                    for (var j = 0; j < linestoedit.length; j++) {
-                        var linenum = linestoedit[j];
-                        var line = output[linenum];
+                    let Depth = 0;
+                    let OpenChars = GetElementInTable(ModNum, "openbrackets").value;
+                    let CloseChars = GetElementInTable(ModNum, "closebrackets").value;
+                    for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
+                        let LineNum = LinesToEdit[iLineNum];
+                        let Line = Output[LineNum];
                         //must find closing brackets before adding tabs
-                        for (var c = 0; c < closechars.length; c++) {
-                            var cchar = closechars[c];
-                            var hits = line.split(cchar).length - 1;
-                            depth -= hits;
+                        for (let iChar = 0; iChar < CloseChars.length; iChar++) {
+                            let Char = CloseChars[iChar];
+                            let Hits = Line.split(Char).length - 1;
+                            Depth -= Hits;
                         }
                         //add tabs
-                        for (var k = 0; k < depth; k++) {
-                            output[linenum] = "\t" + output[linenum];
+                        for (let iNumTabs = 0; iNumTabs < Depth; iNumTabs++) {
+                            Output[LineNum] = "\t" + Output[LineNum];
                         }
                         //find opening brackets
-                        for (var c = 0; c < openchars.length; c++) {
-                            var ochar = openchars[c];
-                            var hits = line.split(ochar).length - 1;
-                            depth += hits;
+                        for (let iChar = 0; iChar < OpenChars.length; iChar++) {
+                            let Char = OpenChars[iChar];
+                            let Hits = Line.split(Char).length - 1;
+                            Depth += Hits;
                         }
                     }
-                    return output;
-                    break;
+                    return Output;
                 case "numberlines":
-                    effectfunction = (line, linenum, iter) => { return (+linenum + +GetElementInTable(iter, "startat").value) + GetElementInTable(iter, "delim").value + line };
+                    EffectFunction = (Line, LineNum, ModNum) => { return (+LineNum + +GetElementInTable(ModNum, "startat").value) + GetElementInTable(ModNum, "delim").value + Line };
                     break;
                 default:
                     console.log("Unknown effect");
+                    //fallthrough
                 case "copy":
-                    effectfunction = (line, linenum, iter) => { return line };
+                    EffectFunction = (Line) => { return Line };
                     break;
             }
-            var deletedlines = 0;
-            for (var j = 0; j < linestoedit.length; j++) {
-                var linenum = linestoedit[j] - deletedlines;
-                output[linenum] = effectfunction(input[linenum], linenum, iter);
-                if (output[linenum] == "texttoolinternalsignal_delete") {
-                    output.splice(linenum, 1);
-                    deletedlines++;
+            let DeletedLines = 0;
+            for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
+                let LineNum = LinesToEdit[iLineNum] - DeletedLines;
+                Output[LineNum] = EffectFunction(Input[LineNum], LineNum, ModNum);
+                if (Output[LineNum] === "texttoolinternalsignal_delete") {
+                    Output.splice(LineNum, 1);
+                    DeletedLines++;
                 }
             }
-            return output;
+            return Output;
         }
     </script>
 </body>
