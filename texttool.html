@@ -222,6 +222,8 @@
                 LastInput.remove();
             }
             AddListeners();
+            //and always delete old add buttons
+            ModTable.remove();
         }
         function GetElementInTable(ModNum, ElementName) {
             let Table = document.getElementsByClassName("copyabletable")[ModNum];
