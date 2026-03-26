@@ -1,173 +1,147 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: March 24, 2026-->
+<!--Last time I remembered to update the build date: March 26, 2026-->
 <head>
+    <style>
+        .intermediary {
+            display:none;
+        }
+        body {
+            background-color:lightgray;
+            font-family:arial,serif;
+            margin:0;
+        }
+        .form {
+            position:absolute;
+            border:1px solid black;
+            background-color:white;
+            user-select:none;
+        }
+        .draggableselectable {
+            float:right;
+            user-select:none;
+            padding:10px;
+            background-image: repeating-linear-gradient(135deg, #fff 0%, #fff 15%, #d8d8d8 15%, #d8d8d8 30%);
+            position:absolute;
+            right:0;
+        }
+        .anchorpoint {
+            height:10px;
+            width:10px;
+            margin:10px;
+            background-color:#bbb;
+            border-radius:50%;
+            display:inline-block;
+            position:absolute;
+        }
+        .anchorpoint:hover {
+            height:20px;
+            width:20px;
+            margin:5px;
+            background-color:#888;
+            border-radius:50%;
+            display:inline-block;
+            position:absolute;
+        }
+        .anchorconnectsuggest {
+            height:20px;
+            width:20px;
+            margin:5px;
+            background-color:#000;
+            border-radius:50%;
+            display:inline-block;
+            position:absolute;
+        }
+        .copyabletable {
+            padding: 20px 10px 10px;
+        }
+    </style>
     <title></title>
 </head>
 <body>
     <form name="form" class="form">
+        <div class="anchorpoint"></div>
+        <div class="draggableselectable">DRAG</div>
         <table class="copyabletable">
             <tr>
-                <td>
-                    <label for="targetmodeselect" title="Select what text to target with the effect">Target:</label>
-                </td>
-                <td>
-                    <label>
-                        <select name="targetmodeselect" id="targetmodeselect">
-                            <option value="alltext">All Text</option>
-                            <option value="duplicatelines">Duplicate Lines</option>
-                            <option value="emptylines">Empty Lines</option>
-                            <option value="evenlines">Even Lines</option>
-                            <option value="withtokens">Lines with Tokens</option>
-                            <option value="without_tokens">Lines without Tokens</option>
-                            <option value="oddlines">Odd Lines</option>
-                            <option value="repeatlines">Repeat Lines</option>
-                            <option value="uniquelines">Unique Lines</option>
-                        </select>
-                    </label>
-                </td>
+                <td><label title="Select what text to target with the effect">Target:</label></td>
+                <td><label><select name="targetmodeselect" class="targetmodeselect">
+                    <option value="alltext">All Text</option>
+                    <option value="duplicatelines">Duplicate Lines</option>
+                    <option value="emptylines">Empty Lines</option>
+                    <option value="evenlines">Even Lines</option>
+                    <option value="withtokens">Lines with Tokens</option>
+                    <option value="without_tokens">Lines without Tokens</option>
+                    <option value="oddlines">Odd Lines</option>
+                    <option value="repeatlines">Repeat Lines</option>
+                    <option value="uniquelines">Unique Lines</option>
+                </select></label></td>
             </tr>
             <tr>
-                <td>
-                    <label for="effectselect" title="Select effect to apply to targeted text">Effect:</label>
-                </td>
-                <td>
-                    <label>
-                        <select name="effectselect" id="effectselect">
-                            <option value="copy">Copy (Debug)</option>
-                            <option value="prefixsuffix">Add Prefix/Suffix</option>
-                            <option value="allcombos">All Combinations</option>
-                            <option value="camelseparate">Camel Case Separate</option>
-                            <option value="clear">Clear</option>
-                            <option value="colext">Column Extract</option>
-                            <option value="delete">Delete</option>
-                            <option value="insertnewline">Insert Newline</option>
-                            <option value="makelowercase">Make Lowercase</option>
-                            <option value="makeuppercase">Make Uppercase</option>
-                            <option value="numberlines">Number Lines</option>
-                            <option value="tabbrackets">Re-Tab By Brackets</option>
-                            <option value="replacetable">Replace Table</option>
-                            <option value="reverse">Reverse Lines</option>
-                            <option value="sort">Sort Alphabetically</option>
-                            <option value="sortnumstrings">Sort by # Instances of Substring</option>
-                            <option value="tabtable">Tab Table</option>
-                        </select>
-                    </label>
-                </td>
+                <td><label title="Select effect to apply to targeted text">Effect:</label></td>
+                <td><label><select name="effectselect" class="effectselect">
+                    <option value="copy">Copy (Debug)</option>
+                    <option value="prefixsuffix">Add Prefix/Suffix</option>
+                    <option value="allcombos">All Combinations</option>
+                    <option value="camelseparate">Camel Case Separate</option>
+                    <option value="clear">Clear</option>
+                    <option value="colext">Column Extract</option>
+                    <option value="delete">Delete</option>
+                    <option value="insertnewline">Insert Newline</option>
+                    <option value="makelowercase">Make Lowercase</option>
+                    <option value="makeuppercase">Make Uppercase</option>
+                    <option value="numberlines">Number Lines</option>
+                    <option value="tabbrackets">Re-Tab By Brackets</option>
+                    <option value="replacetable">Replace Table</option>
+                    <option value="reverse">Reverse Lines</option>
+                    <option value="sort">Sort Alphabetically</option>
+                    <option value="sortnumstrings">Sort by # Instances of Substring</option>
+                    <option value="tabtable">Tab Table</option>
+                </select></label></td>
             </tr>
-            <tr class="inputtd">
-                <td>
-                    <label for="input" title="Put original text here">Input:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="input" class="inputeventlisten" rows="10" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="replacetabletd intermediary">
+                <td><label title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label></td>
+                <td><label><textarea class="inputeventlisten replacetable" rows="10" cols="50"></textarea></label></td>
             </tr>
-            <tr class="replacetabletd intermediary" style="display: none">
-                <td>
-                    <label for="replacetable" title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="replacetable" class="inputeventlisten" rows="10" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="desiredtabwidthtd intermediary">
+                <td><label title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label></td>
+                <td><label><textarea class="inputeventlisten desiredtabwidth" rows="1" cols="50">4</textarea></label></td>
             </tr>
-            <tr class="desiredtabwidthtd intermediary" style="display: none">
-                <td>
-                    <label for="desiredtabwidth" title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="desiredtabwidth" class="inputeventlisten" rows="1" cols="50">4</textarea>
-                    </label>
-                </td>
+            <tr class="colnotd intermediary">
+                <td><label title="When interpreting text as a table, which column to extract">Column Number:</label></td>
+                <td><label><textarea class="inputeventlisten colno" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="colnotd intermediary" style="display: none">
-                <td>
-                    <label for="colno" title="When interpreting text as a table, which column to extract">Column Number:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="colno" class="inputeventlisten" rows="1" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="openbracketstd intermediary">
+                <td><label title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label></td>
+                <td><label><textarea class="inputeventlisten openbrackets" rows="1" cols="50">([{</textarea></label></td>
             </tr>
-            <tr class="openbracketstd intermediary" style="display: none">
-                <td>
-                    <label for="openbrackets" title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="openbrackets" class="inputeventlisten" rows="1" cols="50">([{</textarea>
-                    </label>
-                </td>
+            <tr class="closebracketstd intermediary">
+                <td><label title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label></td>
+                <td><label><textarea class="inputeventlisten closebrackets" rows="1" cols="50">)]}</textarea></label></td>
             </tr>
-            <tr class="closebracketstd intermediary" style="display: none">
-                <td>
-                    <label for="closebrackets" title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="closebrackets" class="inputeventlisten" rows="1" cols="50">)]}</textarea>
-                    </label>
-                </td>
+            <tr class="delimtd intermediary">
+                <td><label title="A character or string that indicates where to separate text">Delimiter:</label></td>
+                <td><label><textarea class="inputeventlisten delim" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="delimtd intermediary" style="display: none">
-                <td>
-                    <label for="delim" title="A character or string that indicates where to separate text">Delimiter:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="delim" class="inputeventlisten" rows="1" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="tokenstd intermediary">
+                <td><label>Tokens:</label></td>
+                <td><label><textarea class="inputeventlisten tokens" rows="10" cols="50"></textarea></label></td>
             </tr>
-            <tr class="tokenstd intermediary" style="display: none">
-                <td>
-                    <label for="tokens">Tokens:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="tokens" class="inputeventlisten" rows="10" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="prefixtd intermediary">
+                <td><label title="Prefix to add to text">Prefix:</label></td>
+                <td><label><textarea class="inputeventlisten prefix" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="prefixtd intermediary" style="display: none">
-                <td>
-                    <label for="prefix" title="Prefix to add to text">Prefix:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="prefix" class="inputeventlisten" rows="1" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="suffixtd intermediary">
+                <td><label title="Suffix to add to text">Suffix:</label></td>
+                <td><label><textarea class="inputeventlisten suffix" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="suffixtd intermediary" style="display: none">
-                <td>
-                    <label for="suffix" title="Suffix to add to text">Suffix:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="suffix" class="inputeventlisten" rows="1" cols="50"></textarea>
-                    </label>
-                </td>
-            </tr>
-            <tr class="startattd intermediary" style="display: none">
-                <td>
-                    <label for="startat" title="When counting something, the number to start from">Start at:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="startat" class="inputeventlisten" rows="1" cols="50"></textarea>
-                    </label>
-                </td>
+            <tr class="startattd intermediary">
+                <td><label title="When counting something, the number to start from">Start at:</label></td>
+                <td><label><textarea class="inputeventlisten startat" rows="1" cols="50"></textarea></label></td>
             </tr>
             <!--
-            <tr class="matchlinetd intermediary" style="display: none">
+            <tr class="matchlinetd intermediary">
                 <td>
                     <input type="checkbox" class="matchline inputeventlisten">
                     <label for="matchline" title="When comparing or finding text, the entire line must match the target string">Match Whole Line</label><br>
@@ -175,25 +149,27 @@
             </tr>
             -->
             <tr>
-                <td>
-                    <label for="output" title="Edited text appears here!">Output:</label>
-                </td>
-                <td>
-                    <label>
-                        <textarea id="output" rows="10" cols="50"></textarea>
-                    </label>
-                </td>
+                <td><label title="Edited text appears here!">Output:</label></td>
+                <td><label><textarea class="output" rows="10" cols="50"></textarea></label></td>
             </tr>
+            <tr><td>
+                <button type="button" onclick="AddToChain(this)">Add</button>
+            </td></tr>
         </table>
-        <button type="button" onclick="AddToChain(this)">Add</button>
     </form>
     <script>
+        let g_Table;
+        let g_Connections = [];
+        AddInputBox(document.getElementsByClassName("copyabletable")[0]);
         AddListeners();
-        let g_ModNum;
+        AddDraggableFormListener(document.getElementsByClassName("draggableselectable")[0]);
+        AddDraggableCircleListener(document.getElementsByClassName("anchorpoint")[0]);
+        UpdateParameters();
         function AddListeners() {
             let InputListenElems = document.getElementsByClassName("inputeventlisten");
             for (const elem of InputListenElems) {
-                elem.addEventListener("input", UpdateAllTextBoxes);
+                const Update = () => UpdateTextBoxes(elem.parentElement.parentElement.parentElement.parentElement.parentElement);
+                elem.addEventListener("input", Update);
             }
             let EffectSelectElems = document.getElementsByClassName("effectselect");
             for (const elem of EffectSelectElems) {
@@ -204,146 +180,208 @@
                 elem.onchange = UpdateParameters;
             }
         }
-        function UpdateAllTextBoxes() {
-            UpdateTextBoxes(0);
+        function AddDraggableFormListener(Element) {
+            Element.addEventListener("mousedown", () => {
+                const OnMove = (Event) => Form_OnMouseDrag(Event, Element);
+                document.addEventListener("mousemove", OnMove);
+                document.addEventListener("mouseup", () => {
+                    document.removeEventListener("mousemove", OnMove);
+                }, { once: true });
+            });
         }
-        function AddToChain(ModTable) {
-            let TableElems = document.getElementsByClassName("copyabletable");
-            let LastTable = TableElems[TableElems.length - 1];
-            let Clone1 = LastTable.cloneNode(true);
-            document.getElementsByClassName("form")[0].appendChild(Clone1);
-            let Clone2 = ModTable.cloneNode(true);
-            document.getElementsByClassName("form")[0].appendChild(Clone2);
-            //delete the input box we just cloned - modifiers after the first use the previous mod's output as their input
-            let InputElems = document.getElementsByClassName("inputtd");
-            if (InputElems.length > 1) {
-                let ElemNum = InputElems.length - 1;
-                let LastInput = InputElems[ElemNum];
-                LastInput.remove();
-            }
+        function AddDraggableCircleListener(Element) {
+            Element.addEventListener("mousedown", () => {
+                const OnMove = (Event) => Circle_OnMouseDrag(Event, Element);
+                document.addEventListener("mousemove", OnMove);
+                //on drop
+                document.addEventListener("mouseup", () => {
+                    document.removeEventListener("mousemove", OnMove);
+                    //find what circle we're on top of, make a connection, and set both circles back to normal
+                    let MouseOverElements = GetElementsUnderCircle(Element);
+                    for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
+                        let MouseElem = MouseOverElements[iElement];
+                        if (MouseElem !== Element && MouseElem.className === "anchorconnectsuggest") {
+                            MouseElem.className = "anchorpoint";
+                            ConnectTableForms(Element.parentNode, MouseElem.parentNode);
+                        }
+                    }
+
+                    //reset circle's position and style
+                    Element.style.position = "relative";
+                    Element.style.top = "0";
+                    Element.style.left = "0";
+                    Element.style.position = "absolute";
+                    Element.className = "anchorpoint";
+                }, { once: true });
+            });
+        }
+        function AddToChain() {
+            let FormElems = document.getElementsByClassName("form");
+            let LastForm = FormElems[FormElems.length - 1];
+            let Clone = LastForm.cloneNode(true);
+            document.body.appendChild(Clone);
             AddListeners();
-            //and always delete old add buttons
-            ModTable.remove();
+            AddDraggableFormListener(Clone.getElementsByClassName("draggableselectable")[0]);
+            AddDraggableCircleListener(Clone.getElementsByClassName("anchorpoint")[0]);
+            OffsetTablePos(Clone);
+            ConnectTableForms(LastForm, Clone);
         }
-        function GetElementInTable(ModNum, ElementName) {
-            let Table = document.getElementsByClassName("copyabletable")[ModNum];
-            /*
-            if (table) {
-                console.log("copyabletable #" + iter + " exists");
-            } else {
-                console.log("copyabletable #" + iter + " did not exist");
+        function ConnectTableForms(SrcTable, DestTable) {
+            //a table can only have one input, and for now, connections only work for supplying inputs, so cancel any others this mod might have
+            let Indices = GetIncomingConnections(DestTable);
+            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                let Index = Indices[iIndex];
+                g_Connections[Index + 1].remove();
+                g_Connections.splice(Index - 1, 3);
             }
-            if (elem) {
-                console.log("element " + ElementName + " exists");
-            } else {
-                console.log("element " + ElementName + " did not exist");
+            let Line = CreateConnectionLine(SrcTable, DestTable);
+            document.body.appendChild(Line);
+            g_Connections.push(SrcTable, DestTable, Line);
+
+            //for now, connections only work for supplying inputs, meaning DestTable's input box is 100% pointless, so delete it
+            //in the future this will be more generalized
+            let InputBox = DestTable.getElementsByClassName("inputtd")[0];
+            if (InputBox) {
+                InputBox.remove();
             }
-            */
+        }
+        function GetElementInTable(Table, ElementName) {
             return Table.getElementsByClassName(ElementName)[0];
         }
+        function AddInputBox(Table) {
+            let Label1 = document.createElement("label");
+            Label1.htmlFor = "input";
+            Label1.title="Put original text here";
+            Label1.innerText = "Input:";
+            let TD1 = document.createElement("td");
+            TD1.appendChild(Label1);
+            let TextArea = document.createElement("textarea");
+            TextArea.className = "input inputeventlisten";
+            TextArea.rows = 10;
+            TextArea.cols = 50;
+            let Label2 = document.createElement("label");
+            Label2.appendChild(TextArea);
+            let TD2 = document.createElement("td");
+            TD2.appendChild(Label2);
+            let TR = document.createElement("tr");
+            TR.className = "inputtd";
+            TR.appendChild(TD1);
+            TR.appendChild(TD2);
+            let TBody = Table.getElementsByTagName("tbody")[0];
+            TBody.insertBefore(TR, TBody.childNodes[3]);
+        }
+
         function UpdateParameters() {
             let TableElems = document.getElementsByClassName("copyabletable");
             for (let iMod = 0; iMod < TableElems.length; iMod++) {
                 //some modes have their own intermediary boxes to set how they work
                 //hide everything by default, re-show based on mode
+                let Table = TableElems[iMod];
                 let IntermedElems = TableElems[iMod].getElementsByClassName("intermediary");
                 for (const elem of IntermedElems) {
                     elem.style.display = "none";
                 }
 
-                let Effect = GetElementInTable(iMod, "effectselect");
+                let Effect = GetElementInTable(Table, "effectselect");
                 switch (Effect.value) {
                     case "prefixsuffix":
-                        GetElementInTable(iMod, "prefixtd").style.display = "table-row";
-                        GetElementInTable(iMod, "suffixtd").style.display = "table-row";
+                        GetElementInTable(Table, "prefixtd").style.display = "table-row";
+                        GetElementInTable(Table, "suffixtd").style.display = "table-row";
                         break;
                     case "colext":
-                        GetElementInTable(iMod, "colnotd").style.display = "table-row";
-                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "colnotd").style.display = "table-row";
+                        GetElementInTable(Table, "delimtd").style.display = "table-row";
                         break;
                     case "replacetable":
-                        GetElementInTable(iMod, "replacetabletd").style.display = "table-row";
+                        GetElementInTable(Table, "replacetabletd").style.display = "table-row";
                         break;
                     case "insertnewline":
                     case "allcombos":
-                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "delimtd").style.display = "table-row";
                         break;
                     case "sortnumstrings":
-                        GetElementInTable(iMod, "tokenstd").style.display = "table-row";
+                        GetElementInTable(Table, "tokenstd").style.display = "table-row";
                         break;
                     case "tabtable":
-                        GetElementInTable(iMod, "desiredtabwidthtd").style.display = "table-row";
-                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "desiredtabwidthtd").style.display = "table-row";
+                        GetElementInTable(Table, "delimtd").style.display = "table-row";
                         break;
                     case "tabbrackets":
-                        GetElementInTable(iMod, "openbracketstd").style.display = "table-row";
-                        GetElementInTable(iMod, "closebracketstd").style.display = "table-row";
+                        GetElementInTable(Table, "openbracketstd").style.display = "table-row";
+                        GetElementInTable(Table, "closebracketstd").style.display = "table-row";
                         break;
                     case "numberlines":
-                        GetElementInTable(iMod, "delimtd").style.display = "table-row";
-                        GetElementInTable(iMod, "startattd").style.display = "table-row";
+                        GetElementInTable(Table, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "startattd").style.display = "table-row";
                         break;
                     default:
                         break;
                 }
-                UpdateTextBoxes(iMod);
+                UpdateTextBoxes(Table);
             }
             let TargetModeElems = document.getElementsByClassName("targetmodeselect");
             for (let iElem = 0; iElem < TargetModeElems.length; iElem++) {
-                let TargetMode = GetElementInTable(iElem, "targetmodeselect");
+                let Table = TableElems[iElem];
+                let TargetMode = GetElementInTable(Table, "targetmodeselect");
                 switch (TargetMode.value) {
                     case "withtokens":
                     case "without_tokens":
-                        GetElementInTable(iElem, "tokenstd").style.display = "table-row";
+                        GetElementInTable(Table, "tokenstd").style.display = "table-row";
                         break;
                     default:
                         break;
                 }
-                UpdateTextBoxes(iElem);
+                UpdateTextBoxes(Table);
             }
         }
-        function UpdateTextBoxes(ModNum) {
-            let TableElems = document.getElementsByClassName("copyabletable");
-            let TargetModeSelectElems = document.getElementsByClassName("targetmodeselect");
-            for (let iMod = ModNum; iMod < TableElems.length; iMod++) {
-                let Output = GetElementInTable(iMod, "output");
-                let Input;
-                //modifiers after the first use the previous mod's output as their input
-                if (iMod === 0) {
-                    Input = GetElementInTable(iMod, "input");
-                } else {
-                    Input = GetElementInTable(iMod - 1, "output");
+        function UpdateTextBoxes(Table) {
+            let Output = GetElementInTable(Table, "output");
+            let Input;
+            //modifiers after the first use the previous mod's output as their input
+            let Indices = GetIncomingConnections(Table.parentElement);
+            if (Indices.length > 0) {
+                for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                    let Index = Indices[iIndex];
+                    Input = GetElementInTable(g_Connections[Index - 1], "output");
                 }
+            } else {
+                Input = GetElementInTable(Table, "input");
+            }
 
-                let Pieces = Input.value.split("\n");
-                let TargetMode = TargetModeSelectElems[iMod];
-                let LinesToEdit = GetTargetLineNums(Pieces, TargetMode, iMod);
-                Output.value = EditLines(Pieces, iMod, LinesToEdit).join("\n");
+            let Pieces = Input.value.split("\n");
+            let TargetMode = GetElementInTable(Table, "targetmodeselect");
+            let LinesToEdit = GetTargetLineNums(Pieces, TargetMode, Table);
+            Output.value = EditLines(Pieces, Table, LinesToEdit).join("\n");
+
+            Indices = GetOutgoingConnections(Table.parentElement);
+            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                let Index = Indices[iIndex];
+                UpdateTextBoxes(g_Connections[Index + 1].getElementsByClassName("copyabletable")[0]);
             }
         }
         //lines not targeted by the target mode are left undisturbed
         //create a list of line numbers we want to edit
-        function GetTargetLineNums(Input, TargetMode, ModNum) {
+        function GetTargetLineNums(Input, TargetMode, Table) {
             let TargetFunction;
             let Numbers = [];
             switch (TargetMode.value) {
                 case "duplicatelines":
-                    TargetFunction = (Line, ModNum, Input) => { return Input.indexOf(Line, Input.indexOf(Line) + 1) >= 0 && Line !== "<BR>" };
+                    TargetFunction = (Line) => { return Input.indexOf(Line, Input.indexOf(Line) + 1) >= 0 && Line !== "<BR>" };
                     break;
                 case "repeatlines":
-                    TargetFunction = (Line, ModNum, Input, LineNum) => { return Input.indexOf(Line) !== LineNum && Line !== "<BR>" };
+                    TargetFunction = (Line, LineNum) => { return Input.indexOf(Line) !== LineNum && Line !== "<BR>" };
                     break;
                 case "uniquelines":
-                    TargetFunction = (Line, ModNum, Input) => { return Input.indexOf(Line, Input.indexOf(Line) + 1) === -1 && Line !== "<BR>" };
+                    TargetFunction = (Line) => { return Input.indexOf(Line, Input.indexOf(Line) + 1) === -1 && Line !== "<BR>" };
                     break;
                 case "emptylines":
                     TargetFunction = (Line) => { return Line.length === 0 };
                     break;
                 case "withtokens":
-                    TargetFunction = (Line, ModNum) => {
-                        if (GetElementInTable(ModNum, "tokens") == null)
+                    TargetFunction = (Line) => {
+                        if (GetElementInTable(Table, "tokens") == null)
                             return false;
-                        let Tokens = GetElementInTable(ModNum, "tokens").value.split("\n");
+                        let Tokens = GetElementInTable(Table, "tokens").value.split("\n");
                         for (let iToken = 0; iToken < Tokens.length; iToken++) {
                             if (Line.includes(Tokens[iToken]))
                                 return true;
@@ -352,10 +390,10 @@
                     };
                     break;
                 case "without_tokens":
-                    TargetFunction = (Line, ModNum) => {
-                        if (GetElementInTable(ModNum, "tokens") == null)
+                    TargetFunction = (Line) => {
+                        if (GetElementInTable(Table, "tokens") == null)
                             return false;
-                        let Tokens = GetElementInTable(ModNum, "tokens").value.split("\n");
+                        let Tokens = GetElementInTable(Table, "tokens").value.split("\n");
                         for (let iToken = 0; iToken < Tokens.length; iToken++) {
                             if (Line.includes(Tokens[iToken]))
                                 return false;
@@ -364,10 +402,10 @@
                     };
                     break;
                 case "evenlines":
-                    TargetFunction = (Line, ModNum, Input, LineNum) => { return LineNum % 2 === 0 };
+                    TargetFunction = (Line, LineNum) => { return LineNum % 2 === 0 };
                     break;
                 case "oddlines":
-                    TargetFunction = (Line, ModNum, Input, LineNum) => { return LineNum % 2 === 1 };
+                    TargetFunction = (Line, LineNum) => { return LineNum % 2 === 1 };
                     break;
                 default:
                     console.log("Unknown target mode");
@@ -377,14 +415,14 @@
                     break;
             }
             for (let iLine = 0; iLine < Input.length; iLine++) {
-                if (TargetFunction(Input[iLine], ModNum, Input, iLine)) {
+                if (TargetFunction(Input[iLine], iLine)) {
                     Numbers.push(iLine);
                 }
             }
             return Numbers;
         }
         function compareNumSubstrings(a, b) {
-            let Tokens = GetElementInTable(g_ModNum, "tokens").value;
+            let Tokens = GetElementInTable(g_Table, "tokens").value;
             let A_Count = a.split(Tokens).length - 1;
             let B_Count = b.split(Tokens).length - 1;
             if (A_Count < B_Count) {
@@ -394,19 +432,19 @@
             }
             return 0;
         }
-        function EditLines(Input, ModNum, LinesToEdit) {
+        function EditLines(Input, Table, LinesToEdit) {
             let Output = Input;
             let EffectFunction;
-            let Effect = GetElementInTable(ModNum, "effectselect");
+            let Effect = GetElementInTable(Table, "effectselect");
             switch (Effect.value) {
                 case "insertnewline":
-                    EffectFunction = (Line, LineNum, ModNum) => { return Line.replaceAll(GetElementInTable(ModNum, "delim").value, "\n") };
+                    EffectFunction = (Line) => { return Line.replaceAll(GetElementInTable(Table, "delim").value, "\n") };
                     break;
                 case "replacetable":
-                    EffectFunction = (Line, LineNum, ModNum) => {
-                        let Table = GetElementInTable(ModNum, "replacetable").value.split("\n");
-                        for (let iPair = 0; iPair + 1 < Table.length; iPair += 2) {
-                            Line = Line.replaceAll(Table[iPair], Table[iPair + 1]);
+                    EffectFunction = (Line) => {
+                        let ReplaceTable = GetElementInTable(Table, "replacetable").value.split("\n");
+                        for (let iPair = 0; iPair + 1 < ReplaceTable.length; iPair += 2) {
+                            Line = Line.replaceAll(ReplaceTable[iPair], ReplaceTable[iPair + 1]);
                         }
                         return Line;
                     }
@@ -415,14 +453,14 @@
                 case "sort":
                     return Input.sort();
                 case "sortnumstrings":
-                    g_ModNum = ModNum;
+                    g_Table = Table;
                     return Input.sort(compareNumSubstrings);
                 //what we put in one line depends on all the others
                 case "tabtable": {
-                    GetElementInTable(ModNum, "output").style.tabSize = GetElementInTable(ModNum, "desiredtabwidth").value;
+                    GetElementInTable(Table, "output").style.tabSize = GetElementInTable(Table, "desiredtabwidth").value;
                     let Buffer = Input;
-                    let TabWidth = GetElementInTable(ModNum, "desiredtabwidth").value;
-                    let Delimiter = GetElementInTable(ModNum, "delim").value;
+                    let TabWidth = GetElementInTable(Table, "desiredtabwidth").value;
+                    let Delimiter = GetElementInTable(Table, "delim").value;
                     if (!Delimiter || !TabWidth || TabWidth === "0") {
                         return [];
                     }
@@ -488,12 +526,12 @@
                     return Buffer;
                 }
                 case "prefixsuffix":
-                    EffectFunction = (Line, LineNum, ModNum) => { return GetElementInTable(ModNum, "prefix").value + Line + GetElementInTable(ModNum, "suffix").value };
+                    EffectFunction = (Line) => { return GetElementInTable(Table, "prefix").value + Line + GetElementInTable(Table, "suffix").value };
                     break;
                 case "colext":
-                    EffectFunction = (Line, LineNum, ModNum) => {
-                        let Segments = Line.split(GetElementInTable(ModNum, "delim").value);
-                        return Segments[Math.min(Segments.length - 1, GetElementInTable(ModNum, "colno").value)];
+                    EffectFunction = (Line) => {
+                        let Segments = Line.split(GetElementInTable(Table, "delim").value);
+                        return Segments[Math.min(Segments.length - 1, GetElementInTable(Table, "colno").value)];
                     }
                     break;
                 case "camelseparate":
@@ -517,7 +555,7 @@
                     for (let i = 0; i < Input.length; i++) {
                         Buffer = [Input[i]];
                         for (let iResult = 0; iResult < Results.length; iResult++) {
-                            Buffer.push("" + Results[iResult] + GetElementInTable(ModNum, "delim").value + Input[i]);
+                            Buffer.push("" + Results[iResult] + GetElementInTable(Table, "delim").value + Input[i]);
                         }
                         Results = Results.concat(Buffer);
                     }
@@ -526,8 +564,8 @@
                     return Input.reverse();
                 case "tabbrackets":
                     let Depth = 0;
-                    let OpenChars = GetElementInTable(ModNum, "openbrackets").value;
-                    let CloseChars = GetElementInTable(ModNum, "closebrackets").value;
+                    let OpenChars = GetElementInTable(Table, "openbrackets").value;
+                    let CloseChars = GetElementInTable(Table, "closebrackets").value;
                     for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                         let LineNum = LinesToEdit[iLineNum];
                         let Line = Output[LineNum];
@@ -550,7 +588,7 @@
                     }
                     return Output;
                 case "numberlines":
-                    EffectFunction = (Line, LineNum, ModNum) => { return (+LineNum + +GetElementInTable(ModNum, "startat").value) + GetElementInTable(ModNum, "delim").value + Line };
+                    EffectFunction = (Line, LineNum) => { return (+LineNum + +GetElementInTable(Table, "startat").value) + GetElementInTable(Table, "delim").value + Line };
                     break;
                 default:
                     console.log("Unknown effect");
@@ -562,13 +600,132 @@
             let DeletedLines = 0;
             for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                 let LineNum = LinesToEdit[iLineNum] - DeletedLines;
-                Output[LineNum] = EffectFunction(Input[LineNum], LineNum, ModNum);
+                Output[LineNum] = EffectFunction(Input[LineNum], LineNum);
                 if (Output[LineNum] === "texttoolinternalsignal_delete") {
                     Output.splice(LineNum, 1);
                     DeletedLines++;
                 }
             }
             return Output;
+        }
+        function Form_OnMouseDrag(Event, Element) {
+            let LeftValue = parseInt(window.getComputedStyle(Element.parentNode).left);
+            let TopValue = parseInt(window.getComputedStyle(Element.parentNode).top);
+            Element.parentNode.style.left = `${LeftValue + Event.movementX}px`;
+            Element.parentNode.style.top = `${TopValue + Event.movementY}px`;
+            UpdateTableConnectionVisuals(Element.parentNode);
+        }
+        function Circle_OnMouseDrag(Event, Element) {
+            let Width = parseInt(window.getComputedStyle(Element).width);
+            let Margin = parseInt(window.getComputedStyle(Element).margin);
+            Element.style.left = `${Event.clientX - (Width / 2 + Margin)}px`;
+            Element.style.top = `${Event.clientY - (Width / 2 + Margin)}px`;
+            //turn other circles black if we're over them to indicate that we'll choose them
+            let MouseOverElements = GetElementsUnderCircle(Element);
+            for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
+                let MouseElem = MouseOverElements[iElement];
+                if (MouseElem.className === "anchorpoint") {
+                    MouseElem.className = "anchorconnectsuggest";
+                }
+            }
+        }
+        function GetElementsUnderCircle(Circle) {
+            let LeftValue = parseInt(window.getComputedStyle(Circle).left);
+            let TopValue = parseInt(window.getComputedStyle(Circle).top);
+            let WidthValue = parseInt(window.getComputedStyle(Circle).width);
+            let HeightValue = parseInt(window.getComputedStyle(Circle).height);
+            return document.elementsFromPoint(+LeftValue + WidthValue / 2, +TopValue + HeightValue / 2);
+        }
+        function UpdateTableConnectionVisuals(Element) {
+            let Indices = GetAllConnections(Element);
+            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                let Index = Indices[iIndex];
+                //if (g_Connections[Index] === Element) {
+                    //connections are stored in a list like so:
+                    //source element, destination element, and then the line element that shows they're connected
+                    //modulo to understand our position in the list
+                    let OffsetInList = Index % 3;
+                    if (OffsetInList === 0) {
+                        g_Connections[Index + 2].style.cssText = CreateConnectionLine(Element, g_Connections[Index + 1]).style.cssText;//we're element 1, so fix up our line to element 2
+                    } else if (OffsetInList === 1) {
+                        g_Connections[Index + 1].style.cssText = CreateConnectionLine(Element, g_Connections[Index - 1]).style.cssText;//we're element 2, so fix up our line to element 1
+                    } else {
+                        debugger;//this shouldn't happen
+                    }
+                //}
+            }
+        }
+        function OffsetTablePos(Element) {
+            let LeftValue = parseInt(window.getComputedStyle(Element).left);
+            let TopValue = parseInt(window.getComputedStyle(Element).top);
+            Element.style.left = `${LeftValue + 20}px`;
+            Element.style.top = `${TopValue + 20}px`;
+        }
+        function GetAllConnections(Element) {
+            let Indices = [];
+            for (let iConnection = 0; iConnection < g_Connections.length; iConnection++) {
+                if (g_Connections[iConnection] === Element) {
+                    Indices.push(iConnection);
+                }
+            }
+            return Indices;
+        }
+        function GetOutgoingConnections(Element) {
+            let Indices = [];
+            for (let iConnection = 0; iConnection < g_Connections.length; iConnection += 3) {
+                if (g_Connections[iConnection] === Element) {
+                    Indices.push(iConnection);
+                }
+            }
+            return Indices;
+        }
+        function GetIncomingConnections(Element) {
+            let Indices = [];
+            for (let iConnection = 1; iConnection < g_Connections.length; iConnection += 3) {
+                if (g_Connections[iConnection] === Element) {
+                    Indices.push(iConnection);
+                }
+            }
+            return Indices;
+        }
+        function CreateConnectionLine(Element1, Element2) {
+            //if (Element1.nodeName !== "FORM" || Element2.nodeName !== "FORM") { debugger; }
+            console.log(Element1.nodeName + ", " + Element2.nodeName);
+            let Left1 = parseInt(window.getComputedStyle(Element1).left) + window.pageXOffset;
+            let Top1 = parseInt(window.getComputedStyle(Element1).top) + window.pageYOffset;
+
+            let Left2 = parseInt(window.getComputedStyle(Element2).left) + window.pageXOffset;
+            let Top2 = parseInt(window.getComputedStyle(Element2).top) + window.pageYOffset;
+
+            let x1 = Left1;
+            let y1 = Top1;
+
+            let x2 = Left2;
+            let y2 = Top2;
+
+            let Length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
+            let Thickness = 2;
+
+            let cx = ((x1 + x2) / 2) - (Length / 2);
+            let cy = ((y1 + y2) / 2) - (Thickness / 2);
+
+            let Angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
+
+            let Line = document.createElement("div");
+            Line.style.padding = "0";
+            Line.style.margin = "0";
+            Line.style.height = Thickness + "px";
+            Line.style.backgroundColor = "black";
+            Line.style.lineHeight = "1px";
+            Line.style.position = "absolute";
+            Line.style.left = cx + "px";
+            Line.style.top = cy + "px";
+            Line.style.width = Length + "px";
+            Line.style.mozTransform = "rotate(" + Angle + "deg)";
+            Line.style.otransform = "rotate(" + Angle + "deg)";
+            Line.style.mstransform = "rotate(" + Angle + "deg)";
+            Line.style.transform = "rotate(" + Angle + "deg)";
+            return Line;
         }
     </script>
 </body>
