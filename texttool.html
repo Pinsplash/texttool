@@ -257,7 +257,7 @@
                     let MouseOverElements = GetElementsUnderCircle(Element);
                     for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                         let MouseElem = MouseOverElements[iElement];
-                        if (MouseElem !== Element && MouseElem.className.includes("anchorconnectsuggest")) {
+                        if (MouseElem !== Element && MouseElem.className.includes("anchorpoint")) {
                             ConnectTableRows(Element.closest("tr"), MouseElem.closest("tr"));
                         }
                     }
@@ -282,7 +282,9 @@
             document.body.appendChild(Clone);
             AddListeners();
             AddDraggableFormListener(Clone.getElementsByClassName("draggableselectable")[0]);
-            AddDraggableCircleListener(Clone.getElementsByClassName("anchorpoint")[0]);
+            for (let iCircle = 0; iCircle < Clone.getElementsByClassName("anchorpoint").length; iCircle++) {
+                AddDraggableCircleListener(Clone.getElementsByClassName("anchorpoint")[iCircle]);
+            }
             OffsetTablePos(Clone);
             ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
         }
