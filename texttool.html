@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: March 26, 2026-->
+<!--Last time I remembered to update the build date: March 27, 2026-->
 <head>
     <style>
         .intermediary {
             display:none;
         }
         body {
-            background-color:lightgray;
+            background-color: #50505c;
             font-family:arial,serif;
             margin:0;
         }
@@ -26,45 +26,57 @@
             position:absolute;
             right:0;
         }
+        .anchortd {
+            height:0;
+            width:20px;
+            padding:0;
+            margin:0;
+            overflow:visible;
+        }
         .anchorpoint {
             height:10px;
             width:10px;
-            margin:10px;
             background-color:#bbb;
             border-radius:50%;
-            display:inline-block;
-            position:absolute;
+            align-items:center;
+            position:relative;
         }
         .anchorpoint:hover {
             height:20px;
             width:20px;
-            margin:5px;
             background-color:#888;
-            border-radius:50%;
-            display:inline-block;
-            position:absolute;
+        }
+        .anchorleft {
+            right:37.5%;
+        }
+        .anchorleft:hover {
+            right:62.5%;
+        }
+        .anchorright {
+            left:87.5%;
+        }
+        .anchorright:hover {
+            left:62.5%;
         }
         .anchorconnectsuggest {
-            height:20px;
-            width:20px;
-            margin:5px;
             background-color:#000;
-            border-radius:50%;
-            display:inline-block;
-            position:absolute;
         }
         .copyabletable {
-            padding: 20px 10px 10px;
+            padding: 10px 0;
+        }
+        textarea[readonly] {
+            background-color: #ccc;
         }
     </style>
     <title></title>
 </head>
 <body>
     <form name="form" class="form">
-        <div class="anchorpoint"></div>
         <div class="draggableselectable">DRAG</div>
         <table class="copyabletable">
+            <tbody>
             <tr>
+                <td class="anchortd anchorleft"></td>
                 <td><label title="Select what text to target with the effect">Target:</label></td>
                 <td><label><select name="targetmodeselect" class="targetmodeselect">
                     <option value="alltext">All Text</option>
@@ -77,8 +89,10 @@
                     <option value="repeatlines">Repeat Lines</option>
                     <option value="uniquelines">Unique Lines</option>
                 </select></label></td>
+                <td class="anchortd"></td>
             </tr>
             <tr>
+                <td class="anchortd"></td>
                 <td><label title="Select effect to apply to targeted text">Effect:</label></td>
                 <td><label><select name="effectselect" class="effectselect">
                     <option value="copy">Copy (Debug)</option>
@@ -99,46 +113,73 @@
                     <option value="sortnumstrings">Sort by # Instances of Substring</option>
                     <option value="tabtable">Tab Table</option>
                 </select></label></td>
+                <td class="anchortd"></td>
+            </tr>
+            <tr class="inputtr">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                <td><label title="Put original text here">Input:</label></td>
+                <td><label><textarea class="inputeventlisten input" rows="10" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="replacetabletr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label></td>
                 <td><label><textarea class="inputeventlisten replacetable" rows="10" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="desiredtabwidthtr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label></td>
                 <td><label><textarea class="inputeventlisten desiredtabwidth" rows="1" cols="50">4</textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="colnotr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="When interpreting text as a table, which column to extract">Column Number:</label></td>
                 <td><label><textarea class="inputeventlisten colno" rows="1" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="openbracketstr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label></td>
                 <td><label><textarea class="inputeventlisten openbrackets" rows="1" cols="50">([{</textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="closebracketstr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label></td>
                 <td><label><textarea class="inputeventlisten closebrackets" rows="1" cols="50">)]}</textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="delimtr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="A character or string that indicates where to separate text">Delimiter:</label></td>
                 <td><label><textarea class="inputeventlisten delim" rows="1" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="tokenstr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label>Tokens:</label></td>
                 <td><label><textarea class="inputeventlisten tokens" rows="10" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="prefixtr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="Prefix to add to text">Prefix:</label></td>
                 <td><label><textarea class="inputeventlisten prefix" rows="1" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="suffixtr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="Suffix to add to text">Suffix:</label></td>
                 <td><label><textarea class="inputeventlisten suffix" rows="1" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <tr class="startattr intermediary">
+                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                 <td><label title="When counting something, the number to start from">Start at:</label></td>
                 <td><label><textarea class="inputeventlisten startat" rows="1" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
             <!--
             <tr class="matchlinetr intermediary">
@@ -149,35 +190,39 @@
             </tr>
             -->
             <tr class="outputtr">
+                <td class="anchortd"></td>
                 <td><label title="Edited text appears here!">Output:</label></td>
                 <td><label><textarea class="output" rows="10" cols="50"></textarea></label></td>
+                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
             </tr>
-            <tr><td>
-                <button type="button" onclick="AddToChain(this)">Add</button>
-            </td></tr>
+            <tr>
+                <td class="anchortd"></td>
+                <td><button type="button" onclick="AddToChain(this)">Add</button></td>
+                <td class="anchortd"></td>
+            </tr>
+            </tbody>
         </table>
     </form>
     <script>
         let g_Table;
         let g_Connections = [];
-        AddInputBox(document.getElementsByClassName("copyabletable")[0]);
         AddListeners();
         AddDraggableFormListener(document.getElementsByClassName("draggableselectable")[0]);
         AddDraggableCircleListener(document.getElementsByClassName("anchorpoint")[0]);
-        UpdateParameters();
+        UpdateParameters(document.getElementsByClassName("copyabletable")[0]);
         function AddListeners() {
             let InputListenElems = document.getElementsByClassName("inputeventlisten");
             for (const elem of InputListenElems) {
-                const Update = () => UpdateTextBoxes(elem.parentElement.parentElement.parentElement.parentElement.parentElement);
+                const Update = () => UpdateTextBoxes(elem.closest(".copyabletable"));
                 elem.addEventListener("input", Update);
             }
             let EffectSelectElems = document.getElementsByClassName("effectselect");
             for (const elem of EffectSelectElems) {
-                elem.onchange = UpdateParameters;
+                elem.onchange = () => UpdateParameters(elem.closest(".copyabletable"));
             }
             let TargetModeSelectElems = document.getElementsByClassName("targetmodeselect");
             for (const elem of TargetModeSelectElems) {
-                elem.onchange = UpdateParameters;
+                elem.onchange = () => UpdateParameters(elem.closest(".copyabletable"));
             }
         }
         function AddDraggableFormListener(Element) {
@@ -200,9 +245,9 @@
                     let MouseOverElements = GetElementsUnderCircle(Element);
                     for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                         let MouseElem = MouseOverElements[iElement];
-                        if (MouseElem !== Element && MouseElem.className === "anchorconnectsuggest") {
+                        if (MouseElem !== Element && MouseElem.className.includes("anchorconnectsuggest")) {
                             MouseElem.className = "anchorpoint";
-                            ConnectTableForms(Element.parentNode, MouseElem.parentNode);
+                            ConnectTableRows(Element.closest("tr"), MouseElem.closest("tr"));
                         }
                     }
 
@@ -215,148 +260,128 @@
                 }, { once: true });
             });
         }
-        function AddToChain() {
-            let FormElems = document.getElementsByClassName("form");
-            let LastForm = FormElems[FormElems.length - 1];
-            let Clone = LastForm.cloneNode(true);
+        function AddToChain(Element) {
+            let Form = Element.closest("form");
+            let Clone = Form.cloneNode(true);
             document.body.appendChild(Clone);
             AddListeners();
             AddDraggableFormListener(Clone.getElementsByClassName("draggableselectable")[0]);
             AddDraggableCircleListener(Clone.getElementsByClassName("anchorpoint")[0]);
             OffsetTablePos(Clone);
-            ConnectTableForms(LastForm, Clone);
+            ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
         }
-        function ConnectTableForms(SrcTable, DestTable) {
-            //a table can only have one input, and for now, connections only work for supplying inputs, so cancel any others this mod might have
-            let Indices = GetIncomingConnections(DestTable);
-            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                let Index = Indices[iIndex];
-                g_Connections[Index + 1].remove();
-                g_Connections.splice(Index - 1, 3);
-            }
-            let Line = CreateConnectionLine(SrcTable, DestTable);
-            document.body.appendChild(Line);
-            g_Connections.push(SrcTable, DestTable, Line);
+        function ConnectTableRows(SrcTR, DestTR) {
+            //a textbox can only have one input source, so cancel any others this mod might have
+            RemoveIncomingConnections(DestTR);
 
-            //for now, connections only work for supplying inputs, meaning DestTable's input box is 100% pointless, so delete it
-            //in the future this will be more generalized
-            let InputBox = DestTable.getElementsByClassName("inputtr")[0];
-            if (InputBox) {
-                InputBox.remove();
-            }
+            //connect
+            let Line = CreateConnectionLine(SrcTR, DestTR);
+            document.body.appendChild(Line);
+            g_Connections.push(SrcTR, DestTR, Line);
+
+            //make destination textbox readonly to avoid confusion
+            DestTR.getElementsByTagName("textarea")[0].setAttribute("readonly", "true");
         }
         function GetElementInTable(Table, ElementName) {
-            return Table.getElementsByClassName(ElementName)[0];
+            let TR = Table.getElementsByClassName(ElementName)[0].closest("tr");
+            let Indices = GetIncomingConnections(TR);
+            if (Indices.length > 0) {
+                return g_Connections[Indices[0] - 1].getElementsByTagName("textarea")[0];
+            } else {
+                return Table.getElementsByClassName(ElementName)[0];
+            }
         }
-        function AddInputBox(Table) {
-            let Label1 = document.createElement("label");
-            Label1.htmlFor = "input";
-            Label1.title = "Put original text here";
-            Label1.innerText = "Input:";
-            let TD1 = document.createElement("td");
-            TD1.appendChild(Label1);
-            let TextArea = document.createElement("textarea");
-            TextArea.className = "input inputeventlisten";
-            TextArea.rows = 10;
-            TextArea.cols = 50;
-            let Label2 = document.createElement("label");
-            Label2.appendChild(TextArea);
-            let TD2 = document.createElement("td");
-            TD2.appendChild(Label2);
-            let TR = document.createElement("tr");
-            TR.className = "inputtr";
-            TR.appendChild(TD1);
-            TR.appendChild(TD2);
-            let TBody = Table.getElementsByTagName("tbody")[0];
-            TBody.insertBefore(TR, TBody.childNodes[3]);
-        }
+        function UpdateParameters(Table) {
+            //some modes have their own intermediary boxes to set how they work
+            //hide everything by default, re-show based on mode
+            let IntermedElems = Table.getElementsByClassName("intermediary");
+            let OldVisibleElems = [];
+            let NewVisibleElems = [];
 
-        function UpdateParameters() {
-            let TableElems = document.getElementsByClassName("copyabletable");
-            for (let iMod = 0; iMod < TableElems.length; iMod++) {
-                //some modes have their own intermediary boxes to set how they work
-                //hide everything by default, re-show based on mode
-                let Table = TableElems[iMod];
-                let IntermedElems = TableElems[iMod].getElementsByClassName("intermediary");
-                for (const elem of IntermedElems) {
+            for (const elem of IntermedElems) {
+                if (elem.style.display !== "none") {
+                    OldVisibleElems.push(elem);
                     elem.style.display = "none";
                 }
+            }
 
-                let Effect = GetElementInTable(Table, "effectselect");
-                switch (Effect.value) {
-                    case "prefixsuffix":
-                        GetElementInTable(Table, "prefixtr").style.display = "table-row";
-                        GetElementInTable(Table, "suffixtr").style.display = "table-row";
-                        break;
-                    case "colext":
-                        GetElementInTable(Table, "colnotr").style.display = "table-row";
-                        GetElementInTable(Table, "delimtr").style.display = "table-row";
-                        break;
-                    case "replacetable":
-                        GetElementInTable(Table, "replacetabletr").style.display = "table-row";
-                        break;
-                    case "insertnewline":
-                    case "allcombos":
-                        GetElementInTable(Table, "delimtr").style.display = "table-row";
-                        break;
-                    case "sortnumstrings":
-                        GetElementInTable(Table, "tokenstr").style.display = "table-row";
-                        break;
-                    case "tabtable":
-                        GetElementInTable(Table, "desiredtabwidthtr").style.display = "table-row";
-                        GetElementInTable(Table, "delimtr").style.display = "table-row";
-                        break;
-                    case "tabbrackets":
-                        GetElementInTable(Table, "openbracketstr").style.display = "table-row";
-                        GetElementInTable(Table, "closebracketstr").style.display = "table-row";
-                        break;
-                    case "numberlines":
-                        GetElementInTable(Table, "delimtr").style.display = "table-row";
-                        GetElementInTable(Table, "startattr").style.display = "table-row";
-                        break;
-                    default:
-                        break;
-                }
-                UpdateTextBoxes(Table);
+            let Effect = GetElementInTable(Table, "effectselect");
+            switch (Effect.value) {
+                case "prefixsuffix":
+                    NewVisibleElems.push(GetElementInTable(Table, "prefixtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "suffixtr"));
+                    break;
+                case "colext":
+                    NewVisibleElems.push(GetElementInTable(Table, "colnotr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    break;
+                case "replacetable":
+                    NewVisibleElems.push(GetElementInTable(Table, "replacetabletr"));
+                    break;
+                case "insertnewline":
+                case "allcombos":
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    break;
+                case "sortnumstrings":
+                    NewVisibleElems.push(GetElementInTable(Table, "tokenstr"));
+                    break;
+                case "tabtable":
+                    NewVisibleElems.push(GetElementInTable(Table, "desiredtabwidthtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    break;
+                case "tabbrackets":
+                    NewVisibleElems.push(GetElementInTable(Table, "openbracketstr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "closebracketstr"));
+                    break;
+                case "numberlines":
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "startattr"));
+                    break;
+                default:
+                    break;
             }
-            let TargetModeElems = document.getElementsByClassName("targetmodeselect");
-            for (let iElem = 0; iElem < TargetModeElems.length; iElem++) {
-                let Table = TableElems[iElem];
-                let TargetMode = GetElementInTable(Table, "targetmodeselect");
-                switch (TargetMode.value) {
-                    case "withtokens":
-                    case "without_tokens":
-                        GetElementInTable(Table, "tokenstr").style.display = "table-row";
-                        break;
-                    default:
-                        break;
-                }
-                UpdateTextBoxes(Table);
+
+            let TargetMode = GetElementInTable(Table, "targetmodeselect");
+            switch (TargetMode.value) {
+                case "withtokens":
+                case "without_tokens":
+                    NewVisibleElems.push(GetElementInTable(Table, "tokenstr"));
+                    break;
+                default:
+                    break;
             }
+
+            for (let iOldElem = 0; iOldElem < OldVisibleElems.length; iOldElem++) {
+                if (!NewVisibleElems.includes(OldVisibleElems[iOldElem])) {
+                    RemoveIncomingConnections(OldVisibleElems[iOldElem]);
+                }
+            }
+
+            for (let iNewElem = 0; iNewElem < NewVisibleElems.length; iNewElem++) {
+                if (!OldVisibleElems.includes(NewVisibleElems[iNewElem])) {
+                    NewVisibleElems[iNewElem].style.display = "table-row";
+                }
+            }
+
+            UpdateTextBoxes(Table);
         }
         function UpdateTextBoxes(Table) {
             let Output = GetElementInTable(Table, "output");
-            let Input;
-            //modifiers after the first use the previous mod's output as their input
-            let Indices = GetIncomingConnections(Table.parentElement);
-            if (Indices.length > 0) {
-                for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                    let Index = Indices[iIndex];
-                    Input = GetElementInTable(g_Connections[Index - 1], "output");
-                }
-            } else {
-                Input = GetElementInTable(Table, "input");
-            }
+            let Input = GetElementInTable(Table, "input");
 
             let Pieces = Input.value.split("\n");
             let TargetMode = GetElementInTable(Table, "targetmodeselect");
             let LinesToEdit = GetTargetLineNums(Pieces, TargetMode, Table);
             Output.value = EditLines(Pieces, Table, LinesToEdit).join("\n");
 
-            Indices = GetOutgoingConnections(Table.parentElement);
-            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                let Index = Indices[iIndex];
-                UpdateTextBoxes(g_Connections[Index + 1].getElementsByClassName("copyabletable")[0]);
+            let TRs = Table.getElementsByTagName("tr");
+            for (let iTR = 0; iTR < TRs.length; iTR++) {
+                let TR = TRs[iTR];
+                let Indices = GetOutgoingConnections(TR);
+                for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                    let Index = Indices[iIndex];
+                    UpdateTextBoxes(g_Connections[Index + 1].closest("table"));
+                }
             }
         }
         //lines not targeted by the target mode are left undisturbed
@@ -609,11 +634,12 @@
             return Output;
         }
         function Form_OnMouseDrag(Event, Element) {
-            let LeftValue = parseInt(window.getComputedStyle(Element.parentNode).left);
-            let TopValue = parseInt(window.getComputedStyle(Element.parentNode).top);
-            Element.parentNode.style.left = `${LeftValue + Event.movementX}px`;
-            Element.parentNode.style.top = `${TopValue + Event.movementY}px`;
-            UpdateTableConnectionVisuals(Element.parentNode);
+            let Form = Element.closest("form");
+            let LeftValue = parseInt(window.getComputedStyle(Form).left);
+            let TopValue = parseInt(window.getComputedStyle(Form).top);
+            Form.style.left = `${LeftValue + Event.movementX}px`;
+            Form.style.top = `${TopValue + Event.movementY}px`;
+            UpdateTableConnectionVisuals(Form);
         }
         function Circle_OnMouseDrag(Event, Element) {
             let Width = parseInt(window.getComputedStyle(Element).width);
@@ -625,7 +651,7 @@
             for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                 let MouseElem = MouseOverElements[iElement];
                 if (MouseElem.className === "anchorpoint") {
-                    MouseElem.className = "anchorconnectsuggest";
+                    MouseElem.className = "anchorpoint anchorconnectsuggest";
                 }
             }
         }
@@ -636,23 +662,25 @@
             let HeightValue = parseInt(window.getComputedStyle(Circle).height);
             return document.elementsFromPoint(+LeftValue + WidthValue / 2, +TopValue + HeightValue / 2);
         }
-        function UpdateTableConnectionVisuals(Element) {
-            let Indices = GetAllConnections(Element);
-            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                let Index = Indices[iIndex];
-                //if (g_Connections[Index] === Element) {
+        function UpdateTableConnectionVisuals(Form) {
+            let TRs = Form.getElementsByTagName("tr");
+            for (let iTR = 0; iTR < TRs.length; iTR++) {
+                let TR = TRs[iTR];
+                let Indices = GetAllConnections(TR);
+                for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
                     //connections are stored in a list like so:
                     //source element, destination element, and then the line element that shows they're connected
                     //modulo to understand our position in the list
+                    let Index = Indices[iIndex];
                     let OffsetInList = Index % 3;
                     if (OffsetInList === 0) {
-                        g_Connections[Index + 2].style.cssText = CreateConnectionLine(Element, g_Connections[Index + 1]).style.cssText;//we're element 1, so fix up our line to element 2
+                        g_Connections[Index + 2].style.cssText = CreateConnectionLine(TR, g_Connections[Index + 1]).style.cssText;//we're element 1, so fix up our line to element 2
                     } else if (OffsetInList === 1) {
-                        g_Connections[Index + 1].style.cssText = CreateConnectionLine(Element, g_Connections[Index - 1]).style.cssText;//we're element 2, so fix up our line to element 1
+                        g_Connections[Index + 1].style.cssText = CreateConnectionLine(g_Connections[Index - 1], TR).style.cssText;//we're element 2, so fix up our line to element 1
                     } else {
                         debugger;//this shouldn't happen
                     }
-                //}
+                }
             }
         }
         function OffsetTablePos(Element) {
@@ -688,28 +716,32 @@
             }
             return Indices;
         }
-        function CreateConnectionLine(Element1, Element2) {
-            //if (Element1.nodeName !== "FORM" || Element2.nodeName !== "FORM") { debugger; }
-            console.log(Element1.nodeName + ", " + Element2.nodeName);
-            let Left1 = parseInt(window.getComputedStyle(Element1).left) + window.pageXOffset;
-            let Top1 = parseInt(window.getComputedStyle(Element1).top) + window.pageYOffset;
+        function RemoveIncomingConnections(DestTR) {
+            let Indices = GetIncomingConnections(DestTR);
+            DestTR.getElementsByTagName("textarea")[0].readonly = "false";
+            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                let Index = Indices[iIndex];
+                g_Connections[Index + 1].remove();
+                g_Connections.splice(Index - 1, 3);
+            }
+        }
+        function CreateConnectionLine(SrcElement, DestElement) {
+            let Rect1 = SrcElement.getBoundingClientRect();
+            let Rect2 = DestElement.getBoundingClientRect();
 
-            let Left2 = parseInt(window.getComputedStyle(Element2).left) + window.pageXOffset;
-            let Top2 = parseInt(window.getComputedStyle(Element2).top) + window.pageYOffset;
+            let SrcX = Rect1.left + Rect1.width + 2.5;
+            let SrcY = Rect1.top + (Rect1.height / 2);
 
-            let x1 = Left1;
-            let y1 = Top1;
+            let DestX = Rect2.left - 2.5;
+            let DestY = Rect2.top + (Rect2.height / 2);
 
-            let x2 = Left2;
-            let y2 = Top2;
-
-            let Length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
+            let Length = Math.sqrt(((DestX - SrcX) * (DestX - SrcX)) + ((DestY - SrcY) * (DestY - SrcY)));
             let Thickness = 2;
 
-            let cx = ((x1 + x2) / 2) - (Length / 2);
-            let cy = ((y1 + y2) / 2) - (Thickness / 2);
+            let cx = ((SrcX + DestX) / 2) - (Length / 2);
+            let cy = ((SrcY + DestY) / 2) - (Thickness / 2);
 
-            let Angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
+            let Angle = Math.atan2((SrcY - DestY), (SrcX - DestX)) * (180 / Math.PI);
 
             let Line = document.createElement("div");
             Line.style.padding = "0";
@@ -725,6 +757,7 @@
             Line.style.otransform = "rotate(" + Angle + "deg)";
             Line.style.mstransform = "rotate(" + Angle + "deg)";
             Line.style.transform = "rotate(" + Angle + "deg)";
+            Line.style.zIndex = "-1";
             return Line;
         }
     </script>
