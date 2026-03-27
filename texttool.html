@@ -208,7 +208,9 @@
         let g_Connections = [];
         AddListeners();
         AddDraggableFormListener(document.getElementsByClassName("draggableselectable")[0]);
-        AddDraggableCircleListener(document.getElementsByClassName("anchorpoint")[0]);
+        for (let iCircle = 0; iCircle < document.getElementsByClassName("anchorpoint").length; iCircle++) {
+            AddDraggableCircleListener(document.getElementsByClassName("anchorpoint")[iCircle]);
+        }
         UpdateParameters(document.getElementsByClassName("copyabletable")[0]);
         function AddListeners() {
             let InputListenElems = document.getElementsByClassName("inputeventlisten");
@@ -256,17 +258,21 @@
                     for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                         let MouseElem = MouseOverElements[iElement];
                         if (MouseElem !== Element && MouseElem.className.includes("anchorconnectsuggest")) {
-                            MouseElem.className = "anchorpoint";
                             ConnectTableRows(Element.closest("tr"), MouseElem.closest("tr"));
                         }
                     }
 
                     //reset circle's position and style
-                    Element.style.position = "relative";
-                    Element.style.top = "0";
-                    Element.style.left = "0";
-                    Element.style.position = "absolute";
-                    Element.className = "anchorpoint";
+                    Element.style.top = "";
+                    Element.style.right = "";
+                    Element.style.position = "";
+                    if (Element.className.includes("anchorright")) {
+                        Element.style.left = "";
+                        Element.className = "anchorpoint anchorright";
+                    } else {
+                        Element.style.left = "";
+                        Element.className = "anchorpoint anchorleft";
+                    }
                 }, { once: true });
             });
         }
@@ -657,12 +663,14 @@
             let Margin = parseInt(window.getComputedStyle(Element).margin);
             Element.style.left = `${Event.clientX - (Width / 2 + Margin)}px`;
             Element.style.top = `${Event.clientY - (Width / 2 + Margin)}px`;
+            Element.style.right = "0";
+            Element.style.position = "fixed";
             //turn other circles black if we're over them to indicate that we'll choose them
             let MouseOverElements = GetElementsUnderCircle(Element);
             for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                 let MouseElem = MouseOverElements[iElement];
                 if (MouseElem.className === "anchorpoint") {
-                    MouseElem.className = "anchorpoint anchorconnectsuggest";
+                    MouseElem.className += " anchorconnectsuggest";
                 }
             }
         }
