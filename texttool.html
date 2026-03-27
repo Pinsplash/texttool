@@ -100,55 +100,55 @@
                     <option value="tabtable">Tab Table</option>
                 </select></label></td>
             </tr>
-            <tr class="replacetabletd intermediary">
+            <tr class="replacetabletr intermediary">
                 <td><label title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label></td>
                 <td><label><textarea class="inputeventlisten replacetable" rows="10" cols="50"></textarea></label></td>
             </tr>
-            <tr class="desiredtabwidthtd intermediary">
+            <tr class="desiredtabwidthtr intermediary">
                 <td><label title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label></td>
                 <td><label><textarea class="inputeventlisten desiredtabwidth" rows="1" cols="50">4</textarea></label></td>
             </tr>
-            <tr class="colnotd intermediary">
+            <tr class="colnotr intermediary">
                 <td><label title="When interpreting text as a table, which column to extract">Column Number:</label></td>
                 <td><label><textarea class="inputeventlisten colno" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="openbracketstd intermediary">
+            <tr class="openbracketstr intermediary">
                 <td><label title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label></td>
                 <td><label><textarea class="inputeventlisten openbrackets" rows="1" cols="50">([{</textarea></label></td>
             </tr>
-            <tr class="closebracketstd intermediary">
+            <tr class="closebracketstr intermediary">
                 <td><label title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label></td>
                 <td><label><textarea class="inputeventlisten closebrackets" rows="1" cols="50">)]}</textarea></label></td>
             </tr>
-            <tr class="delimtd intermediary">
+            <tr class="delimtr intermediary">
                 <td><label title="A character or string that indicates where to separate text">Delimiter:</label></td>
                 <td><label><textarea class="inputeventlisten delim" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="tokenstd intermediary">
+            <tr class="tokenstr intermediary">
                 <td><label>Tokens:</label></td>
                 <td><label><textarea class="inputeventlisten tokens" rows="10" cols="50"></textarea></label></td>
             </tr>
-            <tr class="prefixtd intermediary">
+            <tr class="prefixtr intermediary">
                 <td><label title="Prefix to add to text">Prefix:</label></td>
                 <td><label><textarea class="inputeventlisten prefix" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="suffixtd intermediary">
+            <tr class="suffixtr intermediary">
                 <td><label title="Suffix to add to text">Suffix:</label></td>
                 <td><label><textarea class="inputeventlisten suffix" rows="1" cols="50"></textarea></label></td>
             </tr>
-            <tr class="startattd intermediary">
+            <tr class="startattr intermediary">
                 <td><label title="When counting something, the number to start from">Start at:</label></td>
                 <td><label><textarea class="inputeventlisten startat" rows="1" cols="50"></textarea></label></td>
             </tr>
             <!--
-            <tr class="matchlinetd intermediary">
+            <tr class="matchlinetr intermediary">
                 <td>
                     <input type="checkbox" class="matchline inputeventlisten">
                     <label for="matchline" title="When comparing or finding text, the entire line must match the target string">Match Whole Line</label><br>
                 </td>
             </tr>
             -->
-            <tr>
+            <tr class="outputtr">
                 <td><label title="Edited text appears here!">Output:</label></td>
                 <td><label><textarea class="output" rows="10" cols="50"></textarea></label></td>
             </tr>
@@ -240,7 +240,7 @@
 
             //for now, connections only work for supplying inputs, meaning DestTable's input box is 100% pointless, so delete it
             //in the future this will be more generalized
-            let InputBox = DestTable.getElementsByClassName("inputtd")[0];
+            let InputBox = DestTable.getElementsByClassName("inputtr")[0];
             if (InputBox) {
                 InputBox.remove();
             }
@@ -251,7 +251,7 @@
         function AddInputBox(Table) {
             let Label1 = document.createElement("label");
             Label1.htmlFor = "input";
-            Label1.title="Put original text here";
+            Label1.title = "Put original text here";
             Label1.innerText = "Input:";
             let TD1 = document.createElement("td");
             TD1.appendChild(Label1);
@@ -264,7 +264,7 @@
             let TD2 = document.createElement("td");
             TD2.appendChild(Label2);
             let TR = document.createElement("tr");
-            TR.className = "inputtd";
+            TR.className = "inputtr";
             TR.appendChild(TD1);
             TR.appendChild(TD2);
             let TBody = Table.getElementsByTagName("tbody")[0];
@@ -285,34 +285,34 @@
                 let Effect = GetElementInTable(Table, "effectselect");
                 switch (Effect.value) {
                     case "prefixsuffix":
-                        GetElementInTable(Table, "prefixtd").style.display = "table-row";
-                        GetElementInTable(Table, "suffixtd").style.display = "table-row";
+                        GetElementInTable(Table, "prefixtr").style.display = "table-row";
+                        GetElementInTable(Table, "suffixtr").style.display = "table-row";
                         break;
                     case "colext":
-                        GetElementInTable(Table, "colnotd").style.display = "table-row";
-                        GetElementInTable(Table, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "colnotr").style.display = "table-row";
+                        GetElementInTable(Table, "delimtr").style.display = "table-row";
                         break;
                     case "replacetable":
-                        GetElementInTable(Table, "replacetabletd").style.display = "table-row";
+                        GetElementInTable(Table, "replacetabletr").style.display = "table-row";
                         break;
                     case "insertnewline":
                     case "allcombos":
-                        GetElementInTable(Table, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "delimtr").style.display = "table-row";
                         break;
                     case "sortnumstrings":
-                        GetElementInTable(Table, "tokenstd").style.display = "table-row";
+                        GetElementInTable(Table, "tokenstr").style.display = "table-row";
                         break;
                     case "tabtable":
-                        GetElementInTable(Table, "desiredtabwidthtd").style.display = "table-row";
-                        GetElementInTable(Table, "delimtd").style.display = "table-row";
+                        GetElementInTable(Table, "desiredtabwidthtr").style.display = "table-row";
+                        GetElementInTable(Table, "delimtr").style.display = "table-row";
                         break;
                     case "tabbrackets":
-                        GetElementInTable(Table, "openbracketstd").style.display = "table-row";
-                        GetElementInTable(Table, "closebracketstd").style.display = "table-row";
+                        GetElementInTable(Table, "openbracketstr").style.display = "table-row";
+                        GetElementInTable(Table, "closebracketstr").style.display = "table-row";
                         break;
                     case "numberlines":
-                        GetElementInTable(Table, "delimtd").style.display = "table-row";
-                        GetElementInTable(Table, "startattd").style.display = "table-row";
+                        GetElementInTable(Table, "delimtr").style.display = "table-row";
+                        GetElementInTable(Table, "startattr").style.display = "table-row";
                         break;
                     default:
                         break;
@@ -326,7 +326,7 @@
                 switch (TargetMode.value) {
                     case "withtokens":
                     case "without_tokens":
-                        GetElementInTable(Table, "tokenstd").style.display = "table-row";
+                        GetElementInTable(Table, "tokenstr").style.display = "table-row";
                         break;
                     default:
                         break;
