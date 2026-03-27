@@ -224,6 +224,16 @@
             for (const elem of TargetModeSelectElems) {
                 elem.onchange = () => UpdateParameters(elem.closest(".copyabletable"));
             }
+            let TextAreaElems = document.getElementsByTagName("textarea");
+            for (const elem of TextAreaElems) {
+                elem.addEventListener("mousedown", () => {
+                    const OnMove = () => UpdateTableConnectionVisuals(elem.closest("form"));
+                    document.addEventListener("mousemove", OnMove);
+                    document.addEventListener("mouseup", () => {
+                        document.removeEventListener("mousemove", OnMove);
+                    }, { once: true });
+                });
+            }
         }
         function AddDraggableFormListener(Element) {
             Element.addEventListener("mousedown", () => {
@@ -364,6 +374,7 @@
             }
 
             UpdateTextBoxes(Table);
+            UpdateTableConnectionVisuals(Table.closest("form"));
         }
         function UpdateTextBoxes(Table) {
             let Output = GetElementInTable(Table, "output");
