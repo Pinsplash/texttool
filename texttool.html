@@ -260,12 +260,18 @@
                 document.addEventListener("mouseup", () => {
                     document.removeEventListener("mousemove", OnMove);
                     //find what circle we're on top of, make a connection, and set both circles back to normal
+                    let DropConnection = Element.className.includes("anchorleft");
                     let MouseOverElements = GetElementsUnderCircle(Element);
                     for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                         let MouseElem = MouseOverElements[iElement];
                         if (MouseElem !== Element && MouseElem.className.includes("anchorpoint")) {
                             ConnectTableRows(Element, MouseElem);
+                            DropConnection = false;
                         }
+                    }
+
+                    if (DropConnection) {
+                        RemoveIncomingConnections(Element.closest("tr"));
                     }
 
                     //reset circle's position and style
