@@ -209,6 +209,7 @@
     <script>
         let g_Table;
         let g_Connections = [];
+        let g_zindex = 0;
         AddListeners();
         AddDraggableFormListener(document.getElementsByClassName("draggableselectable")[0]);
         for (let iCircle = 0; iCircle < document.getElementsByClassName("anchorpoint").length; iCircle++) {
@@ -247,6 +248,8 @@
                 document.addEventListener("mouseup", () => {
                     document.removeEventListener("mousemove", OnMove);
                 }, { once: true });
+                g_zindex++;
+                Element.closest("form").style.zIndex = g_zindex;
             });
         }
         function AddDraggableCircleListener(Element) {
@@ -283,6 +286,8 @@
             let Form = Element.closest("form");
             let Clone = Form.cloneNode(true);
             document.body.appendChild(Clone);
+            g_zindex++;
+            Clone.style.zIndex = g_zindex;
             AddListeners();
             AddDraggableFormListener(Clone.getElementsByClassName("draggableselectable")[0]);
             for (let iCircle = 0; iCircle < Clone.getElementsByClassName("anchorpoint").length; iCircle++) {
