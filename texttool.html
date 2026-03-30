@@ -197,8 +197,11 @@
             </tr>
             <tr>
                 <td class="anchortd"></td>
-                <td><button type="button" onclick="AddToChain(this)">Add</button></td>
-                <td class="anchortd"></td>
+                <td></td>
+                <td class="anchortd">
+                    <button type="button" onclick="AddToChain(this)">Add</button>
+                    <button type="button" onclick="RemoveMod(this)">Remove</button>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -287,6 +290,15 @@
             }
             OffsetTablePos(Clone);
             ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
+        }
+        function RemoveMod(Element) {
+            let Form = Element.closest("form");
+            let TRs = Form.getElementsByTagName("tr");
+            for (let iTR = 0; iTR < TRs.length; iTR++) {
+                let TR = TRs[iTR];
+                RemoveAllConnections(TR);
+            }
+            Form.remove();
         }
         function ConnectTableRows(SrcTR, DestTR) {
             //a textbox can only have one input source, so cancel any others this mod might have
@@ -737,14 +749,34 @@
             }
             return Indices;
         }
-        function RemoveIncomingConnections(DestTR) {
-            let Indices = GetIncomingConnections(DestTR);
-            DestTR.getElementsByTagName("textarea")[0].readonly = "false";
+        function RemoveAllConnections(TR) {
+            let Indices = GetAllConnections(TR);
             for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
                 let Index = Indices[iIndex];
-                g_Connections[Index + 1].remove();
-                g_Connections.splice(Index - 1, 3);
+                let OffsetInList = Index % 3;
+                if (OffsetInList === 0) {
+                    RemoveConnection(Index);
+                } else if (OffsetInList === 1) {
+                    RemoveConnection(Index - 1);
+                } else {
+                    debugger;//this shouldn't happen
+                }
             }
+        }
+        function RemoveIncomingConnections(DestTR) {
+            let Indices = GetIncomingConnections(DestTR);
+            for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
+                let Index = Indices[iIndex];
+                RemoveConnection(Index - 1);
+            }
+        }
+        function RemoveConnection(SrcTRIndex) {
+            g_Connections[SrcTRIndex + 2].remove();
+            let DestTR = g_Connections[SrcTRIndex + 1];
+            if (DestTR.getElementsByTagName("textarea")[0]) {
+                DestTR.getElementsByTagName("textarea")[0].removeAttribute("readonly");
+            }
+            g_Connections.splice(SrcTRIndex, 3);
         }
         function CreateConnectionLine(SrcElement, DestElement) {
             let Rect1 = SrcElement.getBoundingClientRect();
