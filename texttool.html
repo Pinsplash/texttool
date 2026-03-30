@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: March 27, 2026-->
+<!--Last time I remembered to update the build date: March 30, 2026-->
 <head>
     <style>
         .intermediary {
@@ -261,7 +261,7 @@
                     for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                         let MouseElem = MouseOverElements[iElement];
                         if (MouseElem !== Element && MouseElem.className.includes("anchorpoint")) {
-                            ConnectTableRows(Element.closest("tr"), MouseElem.closest("tr"));
+                            ConnectTableRows(Element, MouseElem);
                         }
                     }
 
@@ -292,6 +292,10 @@
             ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
         }
         function RemoveMod(Element) {
+            //do not remove if we're the only mod on the page. we don't have an independent add button, so removing us would make the program unusable.
+            if (document.body.getElementsByTagName("form").length === 1) {
+                return;
+            }
             let Form = Element.closest("form");
             let TRs = Form.getElementsByTagName("tr");
             for (let iTR = 0; iTR < TRs.length; iTR++) {
@@ -301,6 +305,32 @@
             Form.remove();
         }
         function ConnectTableRows(SrcTR, DestTR) {
+            //enforce connection directions
+            //can't connect input to input or output to output
+            if (SrcTR.className.includes("anchorright") && DestTR.className.includes("anchorright")) {
+                return;
+            }
+            if (SrcTR.className.includes("anchorleft") && DestTR.className.includes("anchorleft")) {
+                return;
+            }
+            //connection going from left to right, flip it around
+            if (SrcTR.className.includes("anchorleft") && DestTR.className.includes("anchorright")) {
+                let Temp = SrcTR;
+                SrcTR = DestTR;
+                DestTR = Temp;
+            }
+            //can't connect to your own table
+            if (SrcTR.closest("form") === DestTR.closest("form")) {
+                return;
+            }
+            //find TR's now if we didn't aleady
+            if (SrcTR.tagName !== "TR") {
+                SrcTR = SrcTR.closest("tr");
+            }
+            if (DestTR.tagName !== "TR") {
+                DestTR = DestTR.closest("tr");
+            }
+
             //a textbox can only have one input source, so cancel any others this mod might have
             RemoveIncomingConnections(DestTR);
 
