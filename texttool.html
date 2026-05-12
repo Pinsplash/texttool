@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: March 30, 2026-->
+<!--Last time I remembered to update the build date: May 11, 2026-->
 <head>
     <style>
         .intermediary {
@@ -75,139 +75,154 @@
         <div class="draggableselectable">DRAG</div>
         <table class="copyabletable">
             <tbody>
-            <tr>
-                <td class="anchortd anchorleft"></td>
-                <td><label title="Select what text to target with the effect">Target:</label></td>
-                <td><label><select name="targetmodeselect" class="targetmodeselect">
-                    <option value="alltext">All Text</option>
-                    <option value="duplicatelines">Duplicate Lines</option>
-                    <option value="emptylines">Empty Lines</option>
-                    <option value="evenlines">Even Lines</option>
-                    <option value="withtokens">Lines with Tokens</option>
-                    <option value="without_tokens">Lines without Tokens</option>
-                    <option value="oddlines">Odd Lines</option>
-                    <option value="repeatlines">Repeat Lines</option>
-                    <option value="uniquelines">Unique Lines</option>
-                </select></label></td>
-                <td class="anchortd"></td>
-            </tr>
-            <tr>
-                <td class="anchortd"></td>
-                <td><label title="Select effect to apply to targeted text">Effect:</label></td>
-                <td><label><select name="effectselect" class="effectselect">
-                    <option value="copy">Copy (Debug)</option>
-                    <option value="prefixsuffix">Add Prefix/Suffix</option>
-                    <option value="allcombos">All Combinations</option>
-                    <option value="camelseparate">Camel Case Separate</option>
-                    <option value="clear">Clear</option>
-                    <option value="colext">Column Extract</option>
-                    <option value="delete">Delete</option>
-                    <option value="insertnewline">Insert Newline</option>
-                    <option value="makelowercase">Make Lowercase</option>
-                    <option value="makeuppercase">Make Uppercase</option>
-                    <option value="numberlines">Number Lines</option>
-                    <option value="tabbrackets">Re-Tab By Brackets</option>
-                    <option value="replacetable">Replace Table</option>
-                    <option value="reverse">Reverse Lines</option>
-                    <option value="sort">Sort Alphabetically</option>
-                    <option value="sortnumstrings">Sort by # Instances of Substring</option>
-                    <option value="tabtable">Tab Table</option>
-                </select></label></td>
-                <td class="anchortd"></td>
-            </tr>
-            <tr class="inputtr">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="Put original text here">Input:</label></td>
-                <td><label><textarea class="inputeventlisten input" rows="10" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="replacetabletr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label></td>
-                <td><label><textarea class="inputeventlisten replacetable" rows="10" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="desiredtabwidthtr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label></td>
-                <td><label><textarea class="inputeventlisten desiredtabwidth" rows="1" cols="50">4</textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="colnotr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="When interpreting text as a table, which column to extract">Column Number:</label></td>
-                <td><label><textarea class="inputeventlisten colno" rows="1" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="openbracketstr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label></td>
-                <td><label><textarea class="inputeventlisten openbrackets" rows="1" cols="50">([{</textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="closebracketstr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label></td>
-                <td><label><textarea class="inputeventlisten closebrackets" rows="1" cols="50">)]}</textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="delimtr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="A character or string that indicates where to separate text">Delimiter:</label></td>
-                <td><label><textarea class="inputeventlisten delim" rows="1" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="tokenstr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label>Tokens:</label></td>
-                <td><label><textarea class="inputeventlisten tokens" rows="10" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="prefixtr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="Prefix to add to text">Prefix:</label></td>
-                <td><label><textarea class="inputeventlisten prefix" rows="1" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="suffixtr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="Suffix to add to text">Suffix:</label></td>
-                <td><label><textarea class="inputeventlisten suffix" rows="1" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr class="startattr intermediary">
-                <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
-                <td><label title="When counting something, the number to start from">Start at:</label></td>
-                <td><label><textarea class="inputeventlisten startat" rows="1" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <!--
-            <tr class="matchlinetr intermediary">
-                <td>
-                    <input type="checkbox" class="matchline inputeventlisten">
-                    <label for="matchline" title="When comparing or finding text, the entire line must match the target string">Match Whole Line</label><br>
-                </td>
-            </tr>
-            -->
-            <tr class="outputtr">
-                <td class="anchortd"></td>
-                <td><label title="Edited text appears here!">Output:</label></td>
-                <td><label><textarea class="output" rows="10" cols="50"></textarea></label></td>
-                <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
-            </tr>
-            <tr>
-                <td class="anchortd"></td>
-                <td></td>
-                <td class="anchortd">
-                    <button type="button" onclick="AddToChain(this)">Add</button>
-                    <button type="button" onclick="RemoveMod(this)">Remove</button>
-                </td>
-            </tr>
+                <tr>
+                    <td class="anchortd anchorleft"></td>
+                    <td><label title="Select what text to target with the effect">Target:</label></td>
+                    <td>
+                        <label>
+                            <select name="targetmodeselect" class="targetmodeselect">
+                                <option value="alltext">All Text</option>
+                                <option value="duplicatelines">Duplicate Lines</option>
+                                <option value="emptylines">Empty Lines</option>
+                                <option value="evenlines">Even Lines</option>
+                                <option value="withtokens">Lines with Tokens</option>
+                                <option value="without_tokens">Lines without Tokens</option>
+                                <option value="oddlines">Odd Lines</option>
+                                <option value="repeatlines">Repeat Lines</option>
+                                <option value="uniquelines">Unique Lines</option>
+                            </select>
+                        </label>
+                    </td>
+                    <td class="anchortd"></td>
+                </tr>
+                <tr>
+                    <td class="anchortd"></td>
+                    <td><label title="Select effect to apply to targeted text">Effect:</label></td>
+                    <td>
+                        <label>
+                            <select name="effectselect" class="effectselect">
+                                <option value="copy">Copy (Debug)</option>
+                                <option value="prefixsuffix">Add Prefix/Suffix</option>
+                                <option value="allcombos">All Combinations</option>
+                                <option value="camelseparate">Camel Case Separate</option>
+                                <option value="clear">Clear</option>
+                                <option value="colext">Column Extract</option>
+                                <option value="delete">Delete</option>
+                                <option value="insertnewline">Insert Newline</option>
+                                <option value="makelowercase">Make Lowercase</option>
+                                <option value="makeuppercase">Make Uppercase</option>
+                                <option value="numberlines">Number Lines</option>
+                                <option value="tabbrackets">Re-Tab By Brackets</option>
+                                <option value="replacetable">Replace Table</option>
+                                <option value="reverse">Reverse Lines</option>
+                                <option value="sort">Sort Alphabetically</option>
+                                <option value="sortnumstrings">Sort by # Instances of Substring</option>
+                                <option value="tabtable">Tab Table</option>
+                            </select>
+                        </label>
+                    </td>
+                    <td class="anchortd"></td>
+                </tr>
+                <tr class="inputtr">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Put original text here">Input:</label></td>
+                    <td><label><textarea class="inputeventlisten input" rows="10" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="replacetabletr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Batch find and replace. Instances of odd lines will be replaced with the next line down.">Table:</label></td>
+                    <td><label><textarea class="inputeventlisten replacetable" rows="10" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="desiredtabwidthtr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="When working with tabs, the character width of the tabs. Commonly 2, 4, or 8.">Desired Tab Width:</label></td>
+                    <td><label><textarea class="inputeventlisten desiredtabwidth" rows="1" cols="50">4</textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="colnotr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="When interpreting text as a table, which column to extract">Column Number:</label></td>
+                    <td><label><textarea class="inputeventlisten colno" rows="1" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="openbracketstr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Characters that indicate an opening bracket.">Opening Bracket Chars:</label></td>
+                    <td><label><textarea class="inputeventlisten openbrackets" rows="1" cols="50">([{</textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="closebracketstr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Characters that indicate a closing bracket.">Closing Bracket Chars:</label></td>
+                    <td><label><textarea class="inputeventlisten closebrackets" rows="1" cols="50">)]}</textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="delimtr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="A character or string that indicates where to separate text">Delimiter:</label></td>
+                    <td><label><textarea class="inputeventlisten delim" rows="1" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="tokenstr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label>Tokens:</label></td>
+                    <td><label><textarea class="inputeventlisten tokens" rows="10" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="prefixtr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Prefix to add to text">Prefix:</label></td>
+                    <td><label><textarea class="inputeventlisten prefix" rows="1" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="suffixtr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Suffix to add to text">Suffix:</label></td>
+                    <td><label><textarea class="inputeventlisten suffix" rows="1" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="startattr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="When counting something, the number to start from">Start at:</label></td>
+                    <td><label><textarea class="inputeventlisten startat" rows="1" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="effect_matchcasetr intermediary">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" class="effect_matchcase inputeventlisten">
+                        <label for="effect_matchcase" title="Make the task case sensitive. What exactly this means will depend on the effect.">Effect is case sensitive</label><br>
+                    </td>
+                </tr>
+                <tr class="target_matchcasetr intermediary">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" class="target_matchcase inputeventlisten">
+                        <label for="target_matchcase" title="Make the targeting case sensitive">Target case sensitively</label><br>
+                    </td>
+                </tr>
+                <tr class="outputtr">
+                    <td class="anchortd"></td>
+                    <td><label title="Edited text appears here!">Output:</label></td>
+                    <td><label><textarea class="output" rows="10" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr>
+                    <td class="anchortd"></td>
+                    <td></td>
+                    <td class="anchortd">
+                        <button type="button" onclick="AddToChain(this)">Add</button>
+                        <button type="button" onclick="RemoveMod(this)">Remove</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </form>
     <script>
-        let g_Table;
         let g_Connections = [];
         let g_zindex = 0;
         AddListeners();
@@ -385,20 +400,30 @@
                 case "colext":
                     NewVisibleElems.push(GetElementInTable(Table, "colnotr"));
                     NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
                     break;
                 case "replacetable":
                     NewVisibleElems.push(GetElementInTable(Table, "replacetabletr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
                     break;
-                case "insertnewline":
                 case "allcombos":
                     NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
                     break;
+                case "insertnewline":
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
+                    break;
                 case "sortnumstrings":
                     NewVisibleElems.push(GetElementInTable(Table, "tokenstr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
+                    break;
+                case "sort":
+                    NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
                     break;
                 case "tabtable":
                     NewVisibleElems.push(GetElementInTable(Table, "desiredtabwidthtr"));
                     NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
                     break;
                 case "tabbrackets":
                     NewVisibleElems.push(GetElementInTable(Table, "openbracketstr"));
@@ -417,6 +442,7 @@
                 case "withtokens":
                 case "without_tokens":
                     NewVisibleElems.push(GetElementInTable(Table, "tokenstr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "target_matchcasetr"));
                     break;
                 default:
                     break;
@@ -475,27 +501,19 @@
                     TargetFunction = (Line) => { return Line.length === 0 };
                     break;
                 case "withtokens":
-                    TargetFunction = (Line) => {
-                        if (GetElementInTable(Table, "tokens") == null)
-                            return false;
-                        let Tokens = GetElementInTable(Table, "tokens").value.split("\n");
-                        for (let iToken = 0; iToken < Tokens.length; iToken++) {
-                            if (Line.includes(Tokens[iToken]))
-                                return true;
-                        }
-                        return false;
-                    };
-                    break;
                 case "without_tokens":
                     TargetFunction = (Line) => {
                         if (GetElementInTable(Table, "tokens") == null)
                             return false;
                         let Tokens = GetElementInTable(Table, "tokens").value.split("\n");
-                        for (let iToken = 0; iToken < Tokens.length; iToken++) {
-                            if (Line.includes(Tokens[iToken]))
-                                return false;
+                        for (let iToken = 0; iToken < Tokens.length; iToken++)
+                        {
+                            let strA = GetElementInTable(Table, "target_matchcase").checked ? Line : Line.toUpperCase();
+                            let strB = GetElementInTable(Table, "target_matchcase").checked ? Tokens[iToken] : Tokens[iToken].toUpperCase();
+                            if (strA.includes(strB))
+                                return TargetMode.value === "withtokens";
                         }
-                        return true;
+                        return TargetMode.value === "without_tokens";
                     };
                     break;
                 case "evenlines":
@@ -518,40 +536,48 @@
             }
             return Numbers;
         }
-        function compareNumSubstrings(a, b) {
-            let Tokens = GetElementInTable(g_Table, "tokens").value;
-            let A_Count = a.split(Tokens).length - 1;
-            let B_Count = b.split(Tokens).length - 1;
-            if (A_Count < B_Count) {
-                return -1;
-            } else if (A_Count > B_Count) {
-                return 1;
-            }
-            return 0;
-        }
+
         function EditLines(Input, Table, LinesToEdit) {
             let Output = Input;
             let EffectFunction;
             let Effect = GetElementInTable(Table, "effectselect");
             switch (Effect.value) {
                 case "insertnewline":
-                    EffectFunction = (Line) => { return Line.replaceAll(GetElementInTable(Table, "delim").value, "\n") };
+                    EffectFunction = (Line) => { return GetElementInTable(Table, "effect_matchcase").checked ? Line.replaceAll(GetElementInTable(Table, "delim").value, "\n") : Line.replace(new RegExp(GetElementInTable(Table, "delim").value, "ig"), "\n") };
                     break;
                 case "replacetable":
                     EffectFunction = (Line) => {
                         let ReplaceTable = GetElementInTable(Table, "replacetable").value.split("\n");
                         for (let iPair = 0; iPair + 1 < ReplaceTable.length; iPair += 2) {
-                            Line = Line.replaceAll(ReplaceTable[iPair], ReplaceTable[iPair + 1]);
+                            Line = GetElementInTable(Table, "effect_matchcase").checked ? Line.replaceAll(ReplaceTable[iPair], ReplaceTable[iPair + 1]) : Line.replace(new RegExp(ReplaceTable[iPair], "ig"), ReplaceTable[iPair + 1]);
                         }
                         return Line;
                     }
                     break;
                 //can't really think of how i would go about sorting a subset of the input, but can't think of a very good use case either
                 case "sort":
-                    return Input.sort();
+                    return Input.sort((a, b) =>
+                    {
+                        let nameA = GetElementInTable(Table, "effect_matchcase").checked ? a : a.toUpperCase();
+                        let nameB = GetElementInTable(Table, "effect_matchcase").checked ? b : b.toUpperCase();
+                        if (nameA < nameB)
+                            return -1;
+                        else if (nameA > nameB)
+                            return 1;
+                        return 0;
+                    });
                 case "sortnumstrings":
-                    g_Table = Table;
-                    return Input.sort(compareNumSubstrings);
+                    return Input.sort((a, b) =>
+                    {
+                        let Tokens = GetElementInTable(Table, "tokens").value;
+                        let A_Count = GetElementInTable(Table, "effect_matchcase").checked ? a.split(Tokens).length - 1 : a.split(new RegExp(GetElementInTable(Table, "delim").value, "i")).length - 1;
+                        let B_Count = GetElementInTable(Table, "effect_matchcase").checked ? b.split(Tokens).length - 1 : b.split(new RegExp(GetElementInTable(Table, "delim").value, "i")).length - 1;
+                        if (A_Count < B_Count)
+                            return -1;
+                        else if (A_Count > B_Count)
+                            return 1;
+                        return 0;
+                    });
                 //what we put in one line depends on all the others
                 case "tabtable": {
                     GetElementInTable(Table, "output").style.tabSize = GetElementInTable(Table, "desiredtabwidth").value;
@@ -564,7 +590,7 @@
                     //get rid of existing tabs and spaces that come after delimiter
                     for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                         let LineNum = LinesToEdit[iLineNum];
-                        let Segments = Buffer[LineNum].split(Delimiter);
+                        let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Buffer[LineNum].split(Delimiter) : Buffer[LineNum].split(new RegExp(Delimiter, "i"));
                         //start at one to not disturb first segment's leading whitespace (this would be, say, typical code indentation)
                         for (let iSegment = 1; iSegment < Segments.length; iSegment++) {
                             Segments[iSegment] = Segments[iSegment].trim();
@@ -580,7 +606,7 @@
                         for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                             let LineNum = LinesToEdit[iLineNum];
                             let Line = Buffer[LineNum];
-                            let Segments = Line.split(Delimiter);
+                            let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(Delimiter) : Line.split(new RegExp(Delimiter, "i"));
                             MaxSegments = Math.max(Segments.length, MaxSegments);
                             let InnerSegment = Segments[ColNum];
                             let RealLength = InnerSegment.length + Delimiter.length;
@@ -602,7 +628,7 @@
                         for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                             let LineNum = LinesToEdit[iLineNum];
                             let Line = Buffer[LineNum];
-                            let Segments = Line.split(Delimiter);
+                            let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(Delimiter) : Line.split(new RegExp(Delimiter, "i"));
                             let InnerSegment = Segments[ColNum].trim();
                             //add new tabs to match targetcolumns
                             let TextColumn = InnerSegment.length + Delimiter.length;
@@ -627,7 +653,7 @@
                     break;
                 case "colext":
                     EffectFunction = (Line) => {
-                        let Segments = Line.split(GetElementInTable(Table, "delim").value);
+                        let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(GetElementInTable(Table, "delim").value) : Line.split(new RegExp(GetElementInTable(Table, "delim").value, "i"));
                         return Segments[Math.min(Segments.length - 1, GetElementInTable(Table, "colno").value)];
                     }
                     break;
