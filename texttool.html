@@ -171,6 +171,12 @@
                     <td><label><textarea class="inputeventlisten tokens" rows="10" cols="50"></textarea></label></td>
                     <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
                 </tr>
+                <tr class="ignoreprefixestr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="Prefixes to ignore when sorting. Line is sorted as if it starts after a prefix.">Prefixes:</label></td>
+                    <td><label><textarea class="inputeventlisten ignoreprefixes" rows="10" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
                 <tr class="prefixtr intermediary">
                     <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                     <td><label title="Prefix to add to text">Prefix:</label></td>
@@ -419,6 +425,7 @@
                     break;
                 case "sort":
                     NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "ignoreprefixestr"));
                     break;
                 case "tabtable":
                     NewVisibleElems.push(GetElementInTable(Table, "desiredtabwidthtr"));
@@ -560,6 +567,15 @@
                     {
                         let nameA = GetElementInTable(Table, "effect_matchcase").checked ? a : a.toUpperCase();
                         let nameB = GetElementInTable(Table, "effect_matchcase").checked ? b : b.toUpperCase();
+                        let Prefixes = GetElementInTable(Table, "ignoreprefixes").value.split("\n");
+                        for (let iPrefix = 0; iPrefix < Prefixes.length; iPrefix++)
+                        {
+                            let Prefix = GetElementInTable(Table, "effect_matchcase").checked ? Prefixes[iPrefix] : Prefixes[iPrefix].toUpperCase();
+                            if (Prefix && nameA.indexOf(Prefix) === 0)
+                                nameA = nameA.slice(Prefix.length);
+                            if (Prefix && nameB.indexOf(Prefix) === 0)
+                                nameB = nameB.slice(Prefix.length);
+                        }
                         if (nameA < nameB)
                             return -1;
                         else if (nameA > nameB)
@@ -570,8 +586,8 @@
                     return Input.sort((a, b) =>
                     {
                         let Tokens = GetElementInTable(Table, "tokens").value;
-                        let A_Count = GetElementInTable(Table, "effect_matchcase").checked ? a.split(Tokens).length - 1 : a.split(new RegExp(GetElementInTable(Table, "delim").value, "i")).length - 1;
-                        let B_Count = GetElementInTable(Table, "effect_matchcase").checked ? b.split(Tokens).length - 1 : b.split(new RegExp(GetElementInTable(Table, "delim").value, "i")).length - 1;
+                        let A_Count = (GetElementInTable(Table, "effect_matchcase").checked ? a.split(Tokens).length : a.split(new RegExp(GetElementInTable(Table, "delim").value, "i")).length) - 1;
+                        let B_Count = (GetElementInTable(Table, "effect_matchcase").checked ? b.split(Tokens).length : b.split(new RegExp(GetElementInTable(Table, "delim").value, "i")).length) - 1;
                         if (A_Count < B_Count)
                             return -1;
                         else if (A_Count > B_Count)
