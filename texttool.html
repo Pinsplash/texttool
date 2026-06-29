@@ -211,6 +211,14 @@
                         <label for="target_matchcase" title="Make the targeting case sensitive">Target case sensitively</label><br>
                     </td>
                 </tr>
+                <tr class="target_matchlinetr intermediary">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" class="target_matchline inputeventlisten">
+                        <label for="target_matchline" title="Make the targeting match the whole line">Targeting must match whole line</label><br>
+                    </td>
+                </tr>
                 <tr class="outputtr">
                     <td class="anchortd"></td>
                     <td><label title="Edited text appears here!">Output:</label></td>
@@ -450,6 +458,7 @@
                 case "without_tokens":
                     NewVisibleElems.push(GetElementInTable(Table, "tokenstr"));
                     NewVisibleElems.push(GetElementInTable(Table, "target_matchcasetr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "target_matchlinetr"));
                     break;
                 default:
                     break;
@@ -517,7 +526,7 @@
                         {
                             let strA = GetElementInTable(Table, "target_matchcase").checked ? Line : Line.toUpperCase();
                             let strB = GetElementInTable(Table, "target_matchcase").checked ? Tokens[iToken] : Tokens[iToken].toUpperCase();
-                            if (strA.includes(strB))
+                            if (GetElementInTable(Table, "target_matchline").checked ? (strA === strB) : (strA.includes(strB)))
                                 return TargetMode.value === "withtokens";
                         }
                         return TargetMode.value === "without_tokens";
