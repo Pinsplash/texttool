@@ -107,6 +107,7 @@
                                 <option value="camelseparate">Camel Case Separate</option>
                                 <option value="clear">Clear</option>
                                 <option value="colext">Column Extract</option>
+                                <option value="combinelines">Combine Lines</option>
                                 <option value="delete">Delete</option>
                                 <option value="insertnewline">Insert Newline</option>
                                 <option value="makelowercase">Make Lowercase</option>
@@ -210,6 +211,22 @@
                     <td>
                         <input type="checkbox" class="target_matchcase inputeventlisten">
                         <label for="target_matchcase" title="Make the targeting case sensitive">Target case sensitively</label><br>
+                    </td>
+                </tr>
+                <tr class="combine_abovetr intermediary">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" class="combine_above inputeventlisten">
+                        <label for="combine_above" title="Combine target line with the one above itself.">Above</label><br>
+                    </td>
+                </tr>
+                <tr class="combine_belowtr intermediary">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" class="combine_below inputeventlisten">
+                        <label for="combine_below" title="Combine target line with the one below itself.">Below</label><br>
                     </td>
                 </tr>
                 <tr class="target_matchlinetr intermediary">
@@ -417,6 +434,11 @@
                     NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
                     NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
                     break;
+                case "combinelines":
+                    NewVisibleElems.push(GetElementInTable(Table, "combine_abovetr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "combine_belowtr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    break;
                 case "replacetable":
                     NewVisibleElems.push(GetElementInTable(Table, "replacetabletr"));
                     NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
@@ -498,6 +520,12 @@
                     UpdateTextBoxes(g_Connections[Index + 1].closest("table"));
                 }
             }
+        }
+        function GetAdjacentRealLine(Buf, LineNum, Direction)
+        {
+            for (let iLine = LineNum + Direction; iLine >= 0 && iLine < Buf.length; iLine += Direction)
+                if (Buf[iLine] !== "texttoolinternalsignal_delete")
+                    return iLine;
         }
         //lines not targeted by the target mode are left undisturbed
         //create a list of line numbers we want to edit
@@ -748,6 +776,53 @@
                 case "swapoddeven":
                     EffectFunction = (Line, LineNum) => { return LineNum % 2 === 0 ? Input[LineNum + 1] : Input[LineNum - 1] };
                     break;
+                case "combinelines":
+                    EffectFunction = (Line, LineNum) =>
+                    {
+                        let Above = GetElementInTable(Table, "combine_above").checked;
+                        let Below = GetElementInTable(Table, "combine_below").checked;
+                        if (Above || Below)
+                        {
+                            if ((Above && !Below) || (Above && Below && LineNum === Output.length - 1))
+                            {
+                                if (LineNum !== 0)
+                                {
+                                    let OldLineNum = GetAdjacentRealLine(Output, LineNum, -1);
+                                    let OldLine = Output[OldLineNum];
+                                    Output[OldLineNum] = "texttoolinternalsignal_delete";
+                                    return OldLine + GetElementInTable(Table, "delim").value + Line;
+                                }
+                                else
+                                    return Line;
+                            }
+                            else if ((Below && !Above) || (Above && Below && LineNum === 0))
+                            {
+                                if (LineNum !== Output.length - 1)
+                                {
+                                    let OldLineNum = GetAdjacentRealLine(Output, LineNum, +1);
+                                    let OldLine = Output[OldLineNum];
+                                    Output[OldLineNum] = "texttoolinternalsignal_delete";
+                                    return Line + GetElementInTable(Table, "delim").value + OldLine;
+                                }
+                                else
+                                    return Line;
+                            }
+                            else
+                            {
+                                //both
+                                let OldLine1Num = GetAdjacentRealLine(Output, LineNum, -1);
+                                let OldLine1 = Output[OldLine1Num];
+                                Output[OldLine1Num] = "texttoolinternalsignal_delete";
+                                let OldLine2Num = GetAdjacentRealLine(Output, LineNum, +1);
+                                let OldLine2 = Output[OldLine2Num];
+                                Output[OldLine2Num] = "texttoolinternalsignal_delete";
+                                return OldLine1 + GetElementInTable(Table, "delim").value + Line + GetElementInTable(Table, "delim").value + OldLine2;
+                            }
+                        }
+                        else
+                            return Line;
+                    };
+                    break;
                 default:
                     console.log("Unknown effect");
                     //fallthrough
@@ -759,9 +834,15 @@
             for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                 let LineNum = LinesToEdit[iLineNum] - DeletedLines;
                 Output[LineNum] = EffectFunction(Input[LineNum], LineNum);
-                if (Output[LineNum] === "texttoolinternalsignal_delete") {
+            }
+            //combinelines requires we do this in a separate for loop because it can modify the line above a target
+            for (let iLineNum = 0; iLineNum < Output.length; iLineNum++)
+            {
+                let LineNum = iLineNum;
+                if (Output[LineNum] === "texttoolinternalsignal_delete")
+                {
                     Output.splice(LineNum, 1);
-                    DeletedLines++;
+                    iLineNum--;
                 }
             }
             return Output;
