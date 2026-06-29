@@ -632,6 +632,8 @@
                             let LineNum = LinesToEdit[iLineNum];
                             let Line = Buf[LineNum];
                             let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(Delimiter) : Line.split(new RegExp(Delimiter, "i"));
+                            if (Segments[0] === Line)//line has none of delimiter, what do you want me to do?
+                                continue;
                             MaxSegments = Math.max(Segments.length, MaxSegments);
                             let InnerSegment = Segments[ColNum];
                             let RealLength = InnerSegment.length + Delimiter.length;
@@ -654,6 +656,8 @@
                             let LineNum = LinesToEdit[iLineNum];
                             let Line = Buf[LineNum];
                             let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(Delimiter) : Line.split(new RegExp(Delimiter, "i"));
+                            if (Segments[0] === Line)//line has none of delimiter, what do you want me to do?
+                                continue;
                             let InnerSegment = Segments[ColNum].trim();
                             //add new tabs to match targetcolumns
                             let TextColumn = InnerSegment.length + Delimiter.length;
