@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: May 11, 2026-->
+<!--Last time I remembered to update the build date: June 29, 2026-->
 <head>
     <style>
         .intermediary {
@@ -606,7 +606,7 @@
                 //what we put in one line depends on all the others
                 case "tabtable": {
                     GetElementInTable(Table, "output").style.tabSize = GetElementInTable(Table, "desiredtabwidth").value;
-                    let Buffer = Input;
+                    let Buf = Input;
                     let TabWidth = GetElementInTable(Table, "desiredtabwidth").value;
                     let Delimiter = GetElementInTable(Table, "delim").value;
                     if (!Delimiter || !TabWidth || TabWidth === "0") {
@@ -615,12 +615,12 @@
                     //get rid of existing tabs and spaces that come after delimiter
                     for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                         let LineNum = LinesToEdit[iLineNum];
-                        let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Buffer[LineNum].split(Delimiter) : Buffer[LineNum].split(new RegExp(Delimiter, "i"));
+                        let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Buf[LineNum].split(Delimiter) : Buf[LineNum].split(new RegExp(Delimiter, "i"));
                         //start at one to not disturb first segment's leading whitespace (this would be, say, typical code indentation)
                         for (let iSegment = 1; iSegment < Segments.length; iSegment++) {
                             Segments[iSegment] = Segments[iSegment].trim();
                         }
-                        Buffer[LineNum] = Segments.join(Delimiter);
+                        Buf[LineNum] = Segments.join(Delimiter);
                     }
                     //have to loop this because each iteration of tabbing changes the targetcolumns values for subsequent segments
                     let TargetColumns = [];
@@ -630,7 +630,7 @@
                     do {
                         for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                             let LineNum = LinesToEdit[iLineNum];
-                            let Line = Buffer[LineNum];
+                            let Line = Buf[LineNum];
                             let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(Delimiter) : Line.split(new RegExp(Delimiter, "i"));
                             MaxSegments = Math.max(Segments.length, MaxSegments);
                             let InnerSegment = Segments[ColNum];
@@ -652,7 +652,7 @@
                     do {
                         for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++) {
                             let LineNum = LinesToEdit[iLineNum];
-                            let Line = Buffer[LineNum];
+                            let Line = Buf[LineNum];
                             let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Line.split(Delimiter) : Line.split(new RegExp(Delimiter, "i"));
                             let InnerSegment = Segments[ColNum].trim();
                             //add new tabs to match targetcolumns
@@ -667,11 +667,11 @@
                                 }
                                 FirsTab = false;
                             }
-                            Buffer[LineNum] = Segments.join(Delimiter);
+                            Buf[LineNum] = Segments.join(Delimiter);
                         }
                         ColNum++;
                     } while (ColNum < TargetColumns.length)
-                    return Buffer;
+                    return Buf;
                 }
                 case "prefixsuffix":
                     EffectFunction = (Line) => { return GetElementInTable(Table, "prefix").value + Line + GetElementInTable(Table, "suffix").value };
