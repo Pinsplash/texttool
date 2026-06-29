@@ -117,6 +117,7 @@
                                 <option value="reverse">Reverse Lines</option>
                                 <option value="sort">Sort Alphabetically</option>
                                 <option value="sortnumstrings">Sort by # Instances of Substring</option>
+                                <option value="swapoddeven">Swap Odd & Even Lines</option>
                                 <option value="tabtable">Tab Table</option>
                             </select>
                         </label>
@@ -743,6 +744,9 @@
                     return Output;
                 case "numberlines":
                     EffectFunction = (Line, LineNum) => { return (+LineNum + +GetElementInTable(Table, "startat").value) + GetElementInTable(Table, "delim").value + Line };
+                    break;
+                case "swapoddeven":
+                    EffectFunction = (Line, LineNum) => { return LineNum % 2 === 0 ? Input[LineNum + 1] : Input[LineNum - 1] };
                     break;
                 default:
                     console.log("Unknown effect");
