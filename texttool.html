@@ -702,14 +702,14 @@
                     EffectFunction = () => { return "" };
                     break;
                 case "allcombos":
-                    let Buffer = [];
+                    let Buf = [];
                     let Results = [];
                     for (let i = 0; i < Input.length; i++) {
-                        Buffer = [Input[i]];
+                        Buf = [Input[i]];
                         for (let iResult = 0; iResult < Results.length; iResult++) {
-                            Buffer.push("" + Results[iResult] + GetElementInTable(Table, "delim").value + Input[i]);
+                            Buf.push("" + Results[iResult] + GetElementInTable(Table, "delim").value + Input[i]);
                         }
-                        Results = Results.concat(Buffer);
+                        Results = Results.concat(Buf);
                     }
                     return Results;
                 case "reverse":
