@@ -553,8 +553,10 @@
             return Numbers;
         }
 
-        function EditLines(Input, Table, LinesToEdit) {
-            let Output = Input;
+        function EditLines(Input, Table, LinesToEdit)
+        {
+            let Output = [];
+            Output = Object.assign(Output, Input);//must assign by value, not reference
             let EffectFunction;
             let Effect = GetElementInTable(Table, "effectselect");
             switch (Effect.value) {
