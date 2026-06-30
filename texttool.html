@@ -363,6 +363,10 @@
             }
             OffsetTablePos(Clone);
             ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
+            //for some reason cloning a table doesn't copy dropdown options, which will make intermediary elements stop working, so hide them to avoid confusion
+            let IntermedElems = Clone.getElementsByClassName("intermediary");
+            for (const elem of IntermedElems)
+                elem.style.display = "none";
         }
         function RemoveMod(Elem) {
             //do not remove if we're the only mod on the page. we don't have an independent add button, so removing us would make the program unusable.
