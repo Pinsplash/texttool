@@ -617,7 +617,11 @@
                     break;
                 case "append":
                     if (!GetElementInTable(Table, "appendlinebyline").checked)
-                        return Input + GetElementInTable(Table, "delim").value + GetElementInTable(Table, "input2").value;
+                    {
+                        Output[Output.length - 1] = Output[Output.length - 1] + GetElementInTable(Table, "delim").value + GetElementInTable(Table, "input2").value;
+                        //Output.push(GetElementInTable(Table, "input2").value);
+                        return Output;
+                    }
                     else
                         EffectFunction = (Line, LineNum) => { return Line + GetElementInTable(Table, "delim").value + GetElementInTable(Table, "input2").value.split("\n")[LineNum]; };
                     break;
