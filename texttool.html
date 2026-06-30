@@ -418,8 +418,11 @@
         function GetElementInTable(Table, ElementName) {
             let TR = Table.getElementsByClassName(ElementName)[0].closest("tr");
             let Indices = GetIncomingConnections(TR);
-            if (Indices.length > 0) {
-                return g_Connections[Indices[0] - 1].getElementsByTagName("textarea")[0];
+            if (Indices.length > 0)
+            {
+                let ParentText = g_Connections[Indices[0] - 1].getElementsByTagName("textarea")[0];
+                TR.getElementsByTagName("textarea")[0].value = ParentText.value;
+                return ParentText;
             } else {
                 return Table.getElementsByClassName(ElementName)[0];
             }
