@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: June 29, 2026-->
+<!--Last time I remembered to update the build date: June 30, 2026-->
 <head>
     <style>
         .intermediary {
@@ -104,6 +104,7 @@
                                 <option value="copy">Copy (Debug)</option>
                                 <option value="prefixsuffix">Add Prefix/Suffix</option>
                                 <option value="allcombos">All Combinations</option>
+                                <option value="append">Append</option>
                                 <option value="camelseparate">Camel Case Separate</option>
                                 <option value="clear">Clear</option>
                                 <option value="colext">Column Extract</option>
@@ -129,6 +130,12 @@
                     <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
                     <td><label title="Put original text here">Input:</label></td>
                     <td><label><textarea class="inputeventlisten input" rows="10" cols="50"></textarea></label></td>
+                    <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
+                </tr>
+                <tr class="input2tr intermediary">
+                    <td class="anchortd"><div class="anchorpoint anchorleft"></div></td>
+                    <td><label title="A second source of text to add to the first">Input 2:</label></td>
+                    <td><label><textarea class="inputeventlisten input2" rows="10" cols="50"></textarea></label></td>
                     <td class="anchortd"><div class="anchorpoint anchorright"></div></td>
                 </tr>
                 <tr class="replacetabletr intermediary">
@@ -218,7 +225,7 @@
                     <td></td>
                     <td>
                         <input type="checkbox" class="combine_above inputeventlisten">
-                        <label for="combine_above" title="Combine target line with the one above itself.">Above</label><br>
+                        <label for="combine_above" title="Combine target line with the one above itself">Above</label><br>
                     </td>
                 </tr>
                 <tr class="combine_belowtr intermediary">
@@ -226,7 +233,15 @@
                     <td></td>
                     <td>
                         <input type="checkbox" class="combine_below inputeventlisten">
-                        <label for="combine_below" title="Combine target line with the one below itself.">Below</label><br>
+                        <label for="combine_below" title="Combine target line with the one below itself">Below</label><br>
+                    </td>
+                </tr>
+                <tr class="appendlinebylinetr intermediary">
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" class="appendlinebyline inputeventlisten">
+                        <label for="appendlinebyline" title="Append each line in input 2 to the same number of line in input 1">Line By Line</label><br>
                     </td>
                 </tr>
                 <tr class="target_matchlinetr intermediary">
@@ -288,55 +303,55 @@
                 });
             }
         }
-        function AddDraggableFormListener(Element) {
-            Element.addEventListener("mousedown", () => {
-                const OnMove = (Event) => Form_OnMouseDrag(Event, Element);
+        function AddDraggableFormListener(Elem) {
+            Elem.addEventListener("mousedown", () => {
+                const OnMove = (Ev) => Form_OnMouseDrag(Ev, Elem);
                 document.addEventListener("mousemove", OnMove);
                 document.addEventListener("mouseup", () => {
                     document.removeEventListener("mousemove", OnMove);
                 }, { once: true });
                 g_zindex++;
-                Element.closest("form").style.zIndex = g_zindex;
+                Elem.closest("form").style.zIndex = g_zindex;
             });
         }
-        function AddDraggableCircleListener(Element) {
-            Element.addEventListener("mousedown", () => {
-                const OnMove = (Event) => Circle_OnMouseDrag(Event, Element);
+        function AddDraggableCircleListener(Elem) {
+            Elem.addEventListener("mousedown", () => {
+                const OnMove = (Ev) => Circle_OnMouseDrag(Ev, Elem);
                 document.addEventListener("mousemove", OnMove);
                 //on drop
                 document.addEventListener("mouseup", () => {
                     document.removeEventListener("mousemove", OnMove);
                     //find what circle we're on top of, make a connection, and set both circles back to normal
-                    let DropConnection = Element.className.includes("anchorleft");
-                    let MouseOverElements = GetElementsUnderCircle(Element);
+                    let DropConnection = Elem.className.includes("anchorleft");
+                    let MouseOverElements = GetElementsUnderCircle(Elem);
                     for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                         let MouseElem = MouseOverElements[iElement];
-                        if (MouseElem !== Element && MouseElem.className.includes("anchorpoint")) {
-                            ConnectTableRows(Element, MouseElem);
+                        if (MouseElem !== Elem && MouseElem.className.includes("anchorpoint")) {
+                            ConnectTableRows(Elem, MouseElem);
                             DropConnection = false;
                         }
                     }
 
                     if (DropConnection) {
-                        RemoveIncomingConnections(Element.closest("tr"));
+                        RemoveIncomingConnections(Elem.closest("tr"));
                     }
 
                     //reset circle's position and style
-                    Element.style.top = "";
-                    Element.style.right = "";
-                    Element.style.position = "";
-                    if (Element.className.includes("anchorright")) {
-                        Element.style.left = "";
-                        Element.className = "anchorpoint anchorright";
+                    Elem.style.top = "";
+                    Elem.style.right = "";
+                    Elem.style.position = "";
+                    if (Elem.className.includes("anchorright")) {
+                        Elem.style.left = "";
+                        Elem.className = "anchorpoint anchorright";
                     } else {
-                        Element.style.left = "";
-                        Element.className = "anchorpoint anchorleft";
+                        Elem.style.left = "";
+                        Elem.className = "anchorpoint anchorleft";
                     }
                 }, { once: true });
             });
         }
-        function AddToChain(Element) {
-            let Form = Element.closest("form");
+        function AddToChain(Elem) {
+            let Form = Elem.closest("form");
             let Clone = Form.cloneNode(true);
             document.body.appendChild(Clone);
             g_zindex++;
@@ -349,12 +364,12 @@
             OffsetTablePos(Clone);
             ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
         }
-        function RemoveMod(Element) {
+        function RemoveMod(Elem) {
             //do not remove if we're the only mod on the page. we don't have an independent add button, so removing us would make the program unusable.
             if (document.body.getElementsByTagName("form").length === 1) {
                 return;
             }
-            let Form = Element.closest("form");
+            let Form = Elem.closest("form");
             let TRs = Form.getElementsByTagName("tr");
             for (let iTR = 0; iTR < TRs.length; iTR++) {
                 let TR = TRs[iTR];
@@ -446,6 +461,11 @@
                 case "allcombos":
                     NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
                     break;
+                case "append":
+                    NewVisibleElems.push(GetElementInTable(Table, "input2tr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "appendlinebylinetr"));
+                    NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
+                    break;
                 case "insertnewline":
                     NewVisibleElems.push(GetElementInTable(Table, "delimtr"));
                     NewVisibleElems.push(GetElementInTable(Table, "effect_matchcasetr"));
@@ -516,8 +536,8 @@
                 let TR = TRs[iTR];
                 let Indices = GetOutgoingConnections(TR);
                 for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                    let Index = Indices[iIndex];
-                    UpdateTextBoxes(g_Connections[Index + 1].closest("table"));
+                    let Idx = Indices[iIndex];
+                    UpdateTextBoxes(g_Connections[Idx + 1].closest("table"));
                 }
             }
         }
@@ -591,6 +611,12 @@
             switch (Effect.value) {
                 case "insertnewline":
                     EffectFunction = (Line) => { return GetElementInTable(Table, "effect_matchcase").checked ? Line.replaceAll(GetElementInTable(Table, "delim").value, "\n") : Line.replace(new RegExp(GetElementInTable(Table, "delim").value, "ig"), "\n") };
+                    break;
+                case "append":
+                    if (!GetElementInTable(Table, "appendlinebyline").checked)
+                        return Input + GetElementInTable(Table, "delim").value + GetElementInTable(Table, "input2").value;
+                    else
+                        EffectFunction = (Line, LineNum) => { return Line + GetElementInTable(Table, "delim").value + GetElementInTable(Table, "input2").value.split("\n")[LineNum]; };
                     break;
                 case "replacetable":
                     EffectFunction = (Line) => {
@@ -847,23 +873,23 @@
             }
             return Output;
         }
-        function Form_OnMouseDrag(Event, Element) {
-            let Form = Element.closest("form");
+        function Form_OnMouseDrag(Ev, Elem) {
+            let Form = Elem.closest("form");
             let LeftValue = parseInt(window.getComputedStyle(Form).left);
             let TopValue = parseInt(window.getComputedStyle(Form).top);
-            Form.style.left = `${LeftValue + Event.movementX}px`;
-            Form.style.top = `${TopValue + Event.movementY}px`;
+            Form.style.left = `${LeftValue + Ev.movementX}px`;
+            Form.style.top = `${TopValue + Ev.movementY}px`;
             UpdateTableConnectionVisuals(Form);
         }
-        function Circle_OnMouseDrag(Event, Element) {
-            let Width = parseInt(window.getComputedStyle(Element).width);
-            let Margin = parseInt(window.getComputedStyle(Element).margin);
-            Element.style.left = `${Event.clientX - (Width / 2 + Margin)}px`;
-            Element.style.top = `${Event.clientY - (Width / 2 + Margin)}px`;
-            Element.style.right = "0";
-            Element.style.position = "fixed";
+        function Circle_OnMouseDrag(Ev, Elem) {
+            let Width = parseInt(window.getComputedStyle(Elem).width);
+            let Margin = parseInt(window.getComputedStyle(Elem).margin);
+            Elem.style.left = `${Ev.clientX - (Width / 2 + Margin)}px`;
+            Elem.style.top = `${Ev.clientY - (Width / 2 + Margin)}px`;
+            Elem.style.right = "0";
+            Elem.style.position = "fixed";
             //turn other circles black if we're over them to indicate that we'll choose them
-            let MouseOverElements = GetElementsUnderCircle(Element);
+            let MouseOverElements = GetElementsUnderCircle(Elem);
             for (let iElement = 0; iElement < MouseOverElements.length; iElement++) {
                 let MouseElem = MouseOverElements[iElement];
                 if (MouseElem.className === "anchorpoint") {
@@ -887,46 +913,46 @@
                     //connections are stored in a list like so:
                     //source element, destination element, and then the line element that shows they're connected
                     //modulo to understand our position in the list
-                    let Index = Indices[iIndex];
-                    let OffsetInList = Index % 3;
+                    let Idx = Indices[iIndex];
+                    let OffsetInList = Idx % 3;
                     if (OffsetInList === 0) {
-                        g_Connections[Index + 2].style.cssText = CreateConnectionLine(TR, g_Connections[Index + 1]).style.cssText;//we're element 1, so fix up our line to element 2
+                        g_Connections[Idx + 2].style.cssText = CreateConnectionLine(TR, g_Connections[Idx + 1]).style.cssText;//we're element 1, so fix up our line to element 2
                     } else if (OffsetInList === 1) {
-                        g_Connections[Index + 1].style.cssText = CreateConnectionLine(g_Connections[Index - 1], TR).style.cssText;//we're element 2, so fix up our line to element 1
+                        g_Connections[Idx + 1].style.cssText = CreateConnectionLine(g_Connections[Idx - 1], TR).style.cssText;//we're element 2, so fix up our line to element 1
                     } else {
                         debugger;//this shouldn't happen
                     }
                 }
             }
         }
-        function OffsetTablePos(Element) {
-            let LeftValue = parseInt(window.getComputedStyle(Element).left);
-            let TopValue = parseInt(window.getComputedStyle(Element).top);
-            Element.style.left = `${LeftValue + 20}px`;
-            Element.style.top = `${TopValue + 20}px`;
+        function OffsetTablePos(Elem) {
+            let LeftValue = parseInt(window.getComputedStyle(Elem).left);
+            let TopValue = parseInt(window.getComputedStyle(Elem).top);
+            Elem.style.left = `${LeftValue + 20}px`;
+            Elem.style.top = `${TopValue + 20}px`;
         }
-        function GetAllConnections(Element) {
+        function GetAllConnections(Elem) {
             let Indices = [];
             for (let iConnection = 0; iConnection < g_Connections.length; iConnection++) {
-                if (g_Connections[iConnection] === Element) {
+                if (g_Connections[iConnection] === Elem) {
                     Indices.push(iConnection);
                 }
             }
             return Indices;
         }
-        function GetOutgoingConnections(Element) {
+        function GetOutgoingConnections(Elem) {
             let Indices = [];
             for (let iConnection = 0; iConnection < g_Connections.length; iConnection += 3) {
-                if (g_Connections[iConnection] === Element) {
+                if (g_Connections[iConnection] === Elem) {
                     Indices.push(iConnection);
                 }
             }
             return Indices;
         }
-        function GetIncomingConnections(Element) {
+        function GetIncomingConnections(Elem) {
             let Indices = [];
             for (let iConnection = 1; iConnection < g_Connections.length; iConnection += 3) {
-                if (g_Connections[iConnection] === Element) {
+                if (g_Connections[iConnection] === Elem) {
                     Indices.push(iConnection);
                 }
             }
@@ -935,12 +961,12 @@
         function RemoveAllConnections(TR) {
             let Indices = GetAllConnections(TR);
             for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                let Index = Indices[iIndex];
-                let OffsetInList = Index % 3;
+                let Idx = Indices[iIndex];
+                let OffsetInList = Idx % 3;
                 if (OffsetInList === 0) {
-                    RemoveConnection(Index);
+                    RemoveConnection(Idx);
                 } else if (OffsetInList === 1) {
-                    RemoveConnection(Index - 1);
+                    RemoveConnection(Idx - 1);
                 } else {
                     debugger;//this shouldn't happen
                 }
@@ -949,8 +975,8 @@
         function RemoveIncomingConnections(DestTR) {
             let Indices = GetIncomingConnections(DestTR);
             for (let iIndex = 0; iIndex < Indices.length; iIndex++) {
-                let Index = Indices[iIndex];
-                RemoveConnection(Index - 1);
+                let Idx = Indices[iIndex];
+                RemoveConnection(Idx - 1);
             }
         }
         function RemoveConnection(SrcTRIndex) {
