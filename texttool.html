@@ -288,9 +288,7 @@
         AddListeners();
         AddDraggableFormListener(document.getElementsByClassName("draggableselectable")[0]);
         for (let iCircle = 0; iCircle < document.getElementsByClassName("anchorpoint").length; iCircle++)
-        {
             AddDraggableCircleListener(document.getElementsByClassName("anchorpoint")[iCircle]);
-        }
         UpdateParameters(document.getElementsByClassName("copyabletable")[0]);
         function SaveZIndexData()
         {
@@ -392,9 +390,7 @@
                     }
 
                     if (DropConnection)
-                    {
                         RemoveIncomingConnections(Elem.closest("tr"));
-                    }
 
                     //reset circle's position and style
                     Elem.style.top = "";
@@ -404,7 +400,8 @@
                     {
                         Elem.style.left = "";
                         Elem.className = "anchorpoint anchorright";
-                    } else
+                    }
+                    else
                     {
                         Elem.style.left = "";
                         Elem.className = "anchorpoint anchorleft";
@@ -423,9 +420,7 @@
             AddListeners();
             AddDraggableFormListener(Clone.getElementsByClassName("draggableselectable")[0]);
             for (let iCircle = 0; iCircle < Clone.getElementsByClassName("anchorpoint").length; iCircle++)
-            {
                 AddDraggableCircleListener(Clone.getElementsByClassName("anchorpoint")[iCircle]);
-            }
             OffsetTablePos(Clone);
             ConnectTableRows(Form.getElementsByClassName("outputtr")[0], Clone.getElementsByClassName("inputtr")[0]);
             //for some reason cloning a table doesn't copy dropdown options, which will make intermediary elements stop working, so hide them to avoid confusion
@@ -437,9 +432,7 @@
         {
             //do not remove if we're the only mod on the page. we don't have an independent add button, so removing us would make the program unusable.
             if (document.body.getElementsByTagName("form").length === 1)
-            {
                 return;
-            }
             let Form = Elem.closest("form");
             let TRs = Form.getElementsByTagName("tr");
             for (let iTR = 0; iTR < TRs.length; iTR++)
@@ -454,13 +447,9 @@
             //enforce connection directions
             //can't connect input to input or output to output
             if (SrcTR.className.includes("anchorright") && DestTR.className.includes("anchorright"))
-            {
                 return;
-            }
             if (SrcTR.className.includes("anchorleft") && DestTR.className.includes("anchorleft"))
-            {
                 return;
-            }
             //connection going from left to right, flip it around
             if (SrcTR.className.includes("anchorleft") && DestTR.className.includes("anchorright"))
             {
@@ -470,18 +459,12 @@
             }
             //can't connect to your own table
             if (SrcTR.closest("form") === DestTR.closest("form"))
-            {
                 return;
-            }
             //find TR's now if we didn't aleady
             if (SrcTR.tagName !== "TR")
-            {
                 SrcTR = SrcTR.closest("tr");
-            }
             if (DestTR.tagName !== "TR")
-            {
                 DestTR = DestTR.closest("tr");
-            }
 
             //a textbox can only have one input source, so cancel any others this mod might have
             RemoveIncomingConnections(DestTR);
@@ -504,7 +487,8 @@
                 let ParentText = g_Connections[Indices[0] - 1].getElementsByTagName("textarea")[0];
                 TR.getElementsByTagName("textarea")[0].value = ParentText.value;
                 return ParentText;
-            } else
+            }
+            else
             {
                 return Table.getElementsByClassName(ElementName)[0];
             }
@@ -598,19 +582,11 @@
             }
 
             for (let iOldElem = 0; iOldElem < OldVisibleElems.length; iOldElem++)
-            {
                 if (!NewVisibleElems.includes(OldVisibleElems[iOldElem]))
-                {
                     RemoveIncomingConnections(OldVisibleElems[iOldElem]);
-                }
-            }
 
             for (let iNewElem = 0; iNewElem < NewVisibleElems.length; iNewElem++)
-            {
-                //if (!OldVisibleElems.includes(NewVisibleElems[iNewElem])) {
                 NewVisibleElems[iNewElem].style.display = "table-row";
-                //}
-            }
 
             UpdateTextBoxes(Table);
             UpdateTableConnectionVisuals(Table.closest("form"));
@@ -694,12 +670,8 @@
                     break;
             }
             for (let iLine = 0; iLine < Input.length; iLine++)
-            {
                 if (TargetFunction(Input[iLine], iLine))
-                {
                     Numbers.push(iLine);
-                }
-            }
             return Numbers;
         }
 
@@ -729,9 +701,7 @@
                     {
                         let ReplaceTable = GetElementInTable(Table, "replacetable").value.split("\n");
                         for (let iPair = 0; iPair + 1 < ReplaceTable.length; iPair += 2)
-                        {
                             Line = GetElementInTable(Table, "effect_matchcase").checked ? Line.replaceAll(ReplaceTable[iPair], ReplaceTable[iPair + 1]) : Line.replace(new RegExp(ReplaceTable[iPair], "ig"), ReplaceTable[iPair + 1]);
-                        }
                         return Line;
                     }
                     break;
@@ -775,9 +745,7 @@
                     let TabWidth = GetElementInTable(Table, "desiredtabwidth").value;
                     let Delimiter = GetElementInTable(Table, "delim").value;
                     if (!Delimiter || !TabWidth || TabWidth === "0")
-                    {
                         return [];
-                    }
                     //get rid of existing tabs and spaces that come after delimiter
                     for (let iLineNum = 0; iLineNum < LinesToEdit.length; iLineNum++)
                     {
@@ -785,9 +753,7 @@
                         let Segments = GetElementInTable(Table, "effect_matchcase").checked ? Buf[LineNum].split(Delimiter) : Buf[LineNum].split(new RegExp(Delimiter, "i"));
                         //start at one to not disturb first segment's leading whitespace (this would be, say, typical code indentation)
                         for (let iSegment = 1; iSegment < Segments.length; iSegment++)
-                        {
                             Segments[iSegment] = Segments[iSegment].trim();
-                        }
                         Buf[LineNum] = Segments.join(Delimiter);
                     }
                     //have to loop this because each iteration of tabbing changes the targetcolumns values for subsequent segments
@@ -809,12 +775,9 @@
                             let RealLength = InnerSegment.length + Delimiter.length;
                             let BestLength;
                             if (TargetColumns[ColNum])
-                            {
                                 BestLength = TargetColumns[ColNum];
-                            } else
-                            {
+                            else
                                 BestLength = 0;
-                            }
                             TargetColumns[ColNum] = Math.max(BestLength, RealLength);
                             //round to next tab interval
                             TargetColumns[ColNum] = Math.ceil(TargetColumns[ColNum] / TabWidth) * TabWidth;
@@ -840,12 +803,9 @@
                             {
                                 Segments[ColNum + 1] = "\t" + Segments[ColNum + 1];
                                 if (FirsTab)
-                                {
                                     TextColumn += +TabWidth - (+TextColumn % +TabWidth);
-                                } else
-                                {
+                                else
                                     TextColumn += +TabWidth;
-                                }
                                 FirsTab = false;
                             }
                             Buf[LineNum] = Segments.join(Delimiter);
@@ -886,9 +846,7 @@
                     {
                         Buf = [Input[i]];
                         for (let iResult = 0; iResult < Results.length; iResult++)
-                        {
                             Buf.push("" + Results[iResult] + GetElementInTable(Table, "delim").value + Input[i]);
-                        }
                         Results = Results.concat(Buf);
                     }
                     return Results;
@@ -911,9 +869,7 @@
                         }
                         //add tabs
                         for (let iNumTabs = 0; iNumTabs < Depth; iNumTabs++)
-                        {
                             Output[LineNum] = "\t" + Output[LineNum];
-                        }
                         //find opening brackets
                         for (let iChar = 0; iChar < OpenChars.length; iChar++)
                         {
@@ -1024,9 +980,7 @@
             {
                 let MouseElem = MouseOverElements[iElement];
                 if (MouseElem.className === "anchorpoint")
-                {
                     MouseElem.className += " anchorconnectsuggest";
-                }
             }
         }
         function GetElementsUnderCircle(Circle)
@@ -1052,15 +1006,11 @@
                     let Idx = Indices[iIndex];
                     let OffsetInList = Idx % 3;
                     if (OffsetInList === 0)
-                    {
                         g_Connections[Idx + 2].style.cssText = CreateConnectionLine(TR, g_Connections[Idx + 1]).style.cssText;//we're element 1, so fix up our line to element 2
-                    } else if (OffsetInList === 1)
-                    {
+                    else if (OffsetInList === 1)
                         g_Connections[Idx + 1].style.cssText = CreateConnectionLine(g_Connections[Idx - 1], TR).style.cssText;//we're element 2, so fix up our line to element 1
-                    } else
-                    {
+                    else
                         debugger;//this shouldn't happen
-                    }
                 }
             }
         }
@@ -1075,36 +1025,24 @@
         {
             let Indices = [];
             for (let iConnection = 0; iConnection < g_Connections.length; iConnection++)
-            {
                 if (g_Connections[iConnection] === Elem)
-                {
                     Indices.push(iConnection);
-                }
-            }
             return Indices;
         }
         function GetOutgoingConnections(Elem)
         {
             let Indices = [];
             for (let iConnection = 0; iConnection < g_Connections.length; iConnection += 3)
-            {
                 if (g_Connections[iConnection] === Elem)
-                {
                     Indices.push(iConnection);
-                }
-            }
             return Indices;
         }
         function GetIncomingConnections(Elem)
         {
             let Indices = [];
             for (let iConnection = 1; iConnection < g_Connections.length; iConnection += 3)
-            {
                 if (g_Connections[iConnection] === Elem)
-                {
                     Indices.push(iConnection);
-                }
-            }
             return Indices;
         }
         function RemoveAllConnections(TR)
@@ -1115,15 +1053,11 @@
                 let Idx = Indices[iIndex];
                 let OffsetInList = Idx % 3;
                 if (OffsetInList === 0)
-                {
                     RemoveConnection(Idx);
-                } else if (OffsetInList === 1)
-                {
+                else if (OffsetInList === 1)
                     RemoveConnection(Idx - 1);
-                } else
-                {
+                else
                     debugger;//this shouldn't happen
-                }
             }
         }
         function RemoveIncomingConnections(DestTR)
@@ -1140,9 +1074,7 @@
             g_Connections[SrcTRIndex + 2].remove();
             let DestTR = g_Connections[SrcTRIndex + 1];
             if (DestTR.getElementsByTagName("textarea")[0])
-            {
                 DestTR.getElementsByTagName("textarea")[0].removeAttribute("readonly");
-            }
             g_Connections.splice(SrcTRIndex, 3);
             SaveConnectionData();
         }
