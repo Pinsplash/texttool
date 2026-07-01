@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="">
 <!--Original source: https://github.com/Pinsplash/texttool-->
-<!--Last time I remembered to update the build date: June 30, 2026-->
+<!--Last time I remembered to update the build date: July 1, 2026-->
 <head>
     <style>
         .intermediary {
@@ -278,6 +278,35 @@
             AddDraggableCircleListener(document.getElementsByClassName("anchorpoint")[iCircle]);
         }
         UpdateParameters(document.getElementsByClassName("copyabletable")[0]);
+        function SaveZIndexData()
+        {
+            let Script = document.getElementById("zindex_save_script");
+            if (!Script)
+            {
+                Script = document.createElement("script");
+                Script.id = "zindex_save_script";
+                document.body.appendChild(Script);
+            }
+            Script.innerText = "g_zindex = " + g_zindex;
+        }
+        function SaveConnectionData()
+        {
+            let Script = document.getElementById("connection_save_script");
+            if (!Script)
+            {
+                Script = document.createElement("script");
+                Script.id = "connection_save_script";
+                document.body.appendChild(Script);
+            }
+            let ScriptString = "";
+            for (let iConnection = 0; iConnection < g_Connections.length; iConnection++)
+            {
+                ScriptString += "g_Connections.push(document.getElementsByClassName(\"" + g_Connections[iConnection].className + "\")[" +
+                    Array.prototype.slice.call(document.getElementsByClassName(g_Connections[iConnection].className)).indexOf(g_Connections[iConnection]) + "]);";
+            }
+            console.log(ScriptString);
+            Script.innerText = ScriptString;
+        }
         function AddListeners() {
             let InputListenElems = document.getElementsByClassName("inputeventlisten");
             for (const elem of InputListenElems) {
@@ -312,6 +341,7 @@
                 }, { once: true });
                 g_zindex++;
                 Elem.closest("form").style.zIndex = g_zindex;
+                SaveZIndexData();
             });
         }
         function AddDraggableCircleListener(Elem) {
@@ -356,6 +386,7 @@
             document.body.appendChild(Clone);
             g_zindex++;
             Clone.style.zIndex = g_zindex;
+            SaveZIndexData();
             AddListeners();
             AddDraggableFormListener(Clone.getElementsByClassName("draggableselectable")[0]);
             for (let iCircle = 0; iCircle < Clone.getElementsByClassName("anchorpoint").length; iCircle++) {
@@ -415,6 +446,7 @@
             let Line = CreateConnectionLine(SrcTR, DestTR);
             document.body.appendChild(Line);
             g_Connections.push(SrcTR, DestTR, Line);
+            SaveConnectionData();
 
             //make destination textbox readonly to avoid confusion
             DestTR.getElementsByTagName("textarea")[0].setAttribute("readonly", "true");
@@ -997,6 +1029,7 @@
                 DestTR.getElementsByTagName("textarea")[0].removeAttribute("readonly");
             }
             g_Connections.splice(SrcTRIndex, 3);
+            SaveConnectionData();
         }
         function CreateConnectionLine(SrcElement, DestElement) {
             let Rect1 = SrcElement.getBoundingClientRect();
@@ -1017,6 +1050,7 @@
             let Angle = Math.atan2((SrcY - DestY), (SrcX - DestX)) * (180 / Math.PI);
 
             let Line = document.createElement("div");
+            Line.className = "connectionline";
             Line.style.padding = "0";
             Line.style.margin = "0";
             Line.style.height = Thickness + "px";
