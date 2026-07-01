@@ -84,6 +84,7 @@
     <title></title>
 </head>
 <body>
+    <div id="formcontainer">
     <form name="form" class="form">
         <div class="draggableselectable">DRAG</div>
         <table class="copyabletable">
@@ -282,6 +283,8 @@
             </tbody>
         </table>
     </form>
+    </div>
+    <div id="scriptcontainer">
     <script>
         let g_Connections = [];
         let g_zindex = 0;
@@ -297,8 +300,9 @@
             {
                 Script = document.createElement("script");
                 Script.id = "zindex_save_script";
-                document.body.appendChild(Script);
+                document.getElementById("scriptcontainer").appendChild(Script);
             }
+            Script.setAttribute("type", "data");
             Script.innerText = "g_zindex = " + g_zindex;
         }
         function SaveConnectionData()
@@ -308,16 +312,17 @@
             {
                 Script = document.createElement("script");
                 Script.id = "connection_save_script";
-                document.body.appendChild(Script);
+                document.getElementById("scriptcontainer").appendChild(Script);
             }
-            let ScriptString = "";
+            let ScriptString = "console.log(\"Restoring\");";
             for (let iConnection = 0; iConnection < g_Connections.length; iConnection++)
             {
                 ScriptString += "g_Connections.push(document.getElementsByClassName(\"" + g_Connections[iConnection].className + "\")[" +
                     Array.prototype.slice.call(document.getElementsByClassName(g_Connections[iConnection].className)).indexOf(g_Connections[iConnection]) + "]);";
             }
-            console.log(ScriptString);
-            Script.innerText = ScriptString;
+            console.log("Saving " + ScriptString);
+            Script.setAttribute("type", "data");
+            Script.innerHTML = ScriptString;
         }
         function AddListeners()
         {
@@ -413,7 +418,7 @@
         {
             let Form = Elem.closest("form");
             let Clone = Form.cloneNode(true);
-            document.body.appendChild(Clone);
+            document.getElementById("formcontainer").appendChild(Clone);
             g_zindex++;
             Clone.style.zIndex = g_zindex;
             SaveZIndexData();
@@ -431,7 +436,7 @@
         function RemoveMod(Elem)
         {
             //do not remove if we're the only mod on the page. we don't have an independent add button, so removing us would make the program unusable.
-            if (document.body.getElementsByTagName("form").length === 1)
+            if (document.getElementById("formcontainer").getElementsByTagName("form").length === 1)
                 return;
             let Form = Elem.closest("form");
             let TRs = Form.getElementsByTagName("tr");
@@ -471,7 +476,7 @@
 
             //connect
             let Line = CreateConnectionLine(SrcTR, DestTR);
-            document.body.appendChild(Line);
+            document.getElementById("formcontainer").appendChild(Line);
             g_Connections.push(SrcTR, DestTR, Line);
             SaveConnectionData();
 
@@ -1114,6 +1119,27 @@
             Line.style.transform = "rotate(" + Angle + "deg)";
             Line.style.zIndex = "-1";
             return Line;
+        }
+    </script>
+    </div>
+    <script>
+        console.log("end script");
+        //have to trick browser into running script by cloning it
+        let ZIndexScript = document.getElementById("zindex_save_script");
+        if (ZIndexScript)
+        {
+            console.log("found zindex_save_script");
+            ZIndexScript.removeAttribute("type");
+            let Clone = ZIndexScript.cloneNode(true);
+            document.body.appendChild(Clone);
+        }
+        let ConnectionScript = document.getElementById("connection_save_script");
+        if (ConnectionScript)
+        {
+            console.log("found connection_save_script");
+            ConnectionScript.removeAttribute("type");
+            let Clone = ConnectionScript.cloneNode(true);
+            document.body.appendChild(Clone);
         }
     </script>
 </body>
